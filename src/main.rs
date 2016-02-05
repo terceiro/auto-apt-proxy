@@ -1,3 +1,3 @@
 fn main() {
-    println!("Hello, world!");
+    println!("http://localhost:3142");
 }
