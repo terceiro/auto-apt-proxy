@@ -15,6 +15,7 @@ Architecture: any
 Depends: ${misc:Depends},
          ${shlibs:Depends}
 Description: auto detect APT proxy settings
- auto-apt-proxy installs itself as a APT proxy autodetector, and detects common
- setups by checking localhost, your gateway and other "interesting" machines on
- your network for well-known APT proxies such as apt-cacher-ng and others.
+ auto-apt-proxy installs itself as an APT proxy autodetector, and detects
+ common setups by checking localhost, your gateway and other "interesting"
+ machines on your network for well-known APT proxies such as apt-cacher-ng and
+ others.
