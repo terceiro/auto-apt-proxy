@@ -1,0 +1,5 @@
+#!/bin/sh
+
+set -e
+
+echo "http://localhost:3142"
