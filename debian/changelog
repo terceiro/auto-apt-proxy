@@ -1,0 +1,5 @@
+auto-apt-proxy (0) UNSTABLE; urgency=medium
+
+  * Initial Release.
+
+ -- Antonio Terceiro <terceiro@debian.org>  Fri, 05 Feb 2016 15:51:39 -0200

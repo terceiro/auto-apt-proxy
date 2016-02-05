@@ -1,0 +1,17 @@
+Source: auto-apt-proxy
+Section: net
+Priority: optional
+Maintainer: Antonio Terceiro <terceiro@debian.org>
+Build-Depends: debhelper (>=9)
+Standards-Version: 3.9.6
+Homepage: https://gitlab.com/terceiro/auto-apt-proxy
+Vcs-Git: https://gitlab.com/terceiro/auto-apt-proxy.git
+Vcs-Browser: https://gitlab.com/terceiro/auto-apt-proxy
+
+Package: auto-apt-proxy
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: auto detect APT proxy settings
+ auto-apt-proxy installs itself as a APT proxy autodetector, and detects common
+ setups by checking localhost, your gateway and other "interesting" machines on
+ your network for well-known APT proxies such as apt-cacher-ng and others.
