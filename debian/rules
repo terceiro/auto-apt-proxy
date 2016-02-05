@@ -11,6 +11,10 @@ override_dh_auto_install:
 	dh_install target/debug/auto-apt-proxy usr/bin
 	dh_auto_install
 
+override_dh_auto_test:
+	cargo test
+	dh_auto_test
+
 override_dh_auto_clean:
 	cargo clean
 	$(RM) Cargo.lock
