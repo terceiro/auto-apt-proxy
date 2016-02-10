@@ -2,4 +2,29 @@
 
 set -e
 
-echo "http://localhost:3142"
+gateway=$(ip route | awk '/default/ { print($3) }')
+tmpfile=$(mktemp)
+cleanup() {
+  rm -f "$tmpfile"
+}
+trap cleanup INT EXIT TERM
+
+hit() {
+  /usr/lib/apt/apt-helper \
+    -o Acquire::http::Proxy-Auto-Detect=none \
+    -o Acquire::http::Proxy=none \
+    download-file "$@" "$tmpfile" 2>&1
+}
+
+detect_apt_cacher_ng() {
+  local ip="$1"
+  local proxy=http://$ip:3142
+  if hit -o Acquire::http::Proxy::${ip}=none "$proxy" | grep -q -i 406.*usage.information; then
+    echo "$proxy"
+    exit
+  fi
+}
+
+for ip in 127.0.0.1 $gateway; do
+  detect_apt_cacher_ng "$ip"
+done

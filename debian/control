@@ -10,7 +10,7 @@ Vcs-Browser: https://gitlab.com/terceiro/auto-apt-proxy
 
 Package: auto-apt-proxy
 Architecture: any
-Depends: wget,
+Depends: apt,
          ${misc:Depends},
          ${shlibs:Depends},
 Description: auto detect APT proxy settings
