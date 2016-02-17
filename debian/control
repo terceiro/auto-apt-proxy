@@ -9,7 +9,7 @@ Vcs-Git: https://gitlab.com/terceiro/auto-apt-proxy.git
 Vcs-Browser: https://gitlab.com/terceiro/auto-apt-proxy
 
 Package: auto-apt-proxy
-Architecture: any
+Architecture: all
 Depends: apt,
          ${misc:Depends},
          ${shlibs:Depends},
