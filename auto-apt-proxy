@@ -2,7 +2,6 @@
 
 set -e
 
-gateway=$(ip route | awk '/default/ { print($3) }')
 tmpfile=$(mktemp)
 cleanup() {
   rm -f "$tmpfile"
@@ -25,6 +24,7 @@ detect_apt_cacher_ng() {
   fi
 }
 
+gateway=$(ip route | awk '/default/ { print($3) }')
 for ip in 127.0.0.1 $gateway; do
   detect_apt_cacher_ng "$ip"
 done
