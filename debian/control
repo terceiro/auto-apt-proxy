@@ -3,7 +3,7 @@ Section: net
 Priority: optional
 Maintainer: Antonio Terceiro <terceiro@debian.org>
 Build-Depends: debhelper (>=9),
-Standards-Version: 3.9.6
+Standards-Version: 3.9.8
 Homepage: https://gitlab.com/terceiro/auto-apt-proxy
 Vcs-Git: https://gitlab.com/terceiro/auto-apt-proxy.git
 Vcs-Browser: https://gitlab.com/terceiro/auto-apt-proxy
