@@ -30,5 +30,5 @@ Description: auto detect common APT proxy settings
  influence on systems where it is installed.
  .
  For corporate desktop deployments, where the APT proxy can be located at any
- arbitraty host, you should probably try the `squid-deb-proxy-client` package
+ arbitrary host, you should probably try the `squid-deb-proxy-client` package
  instead.
