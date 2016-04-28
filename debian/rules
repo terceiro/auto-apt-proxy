@@ -2,3 +2,16 @@
 
 %:
 	dh $@
+
+override_dh_auto_build: auto-apt-proxy.1
+	dh_auto_build
+
+override_dh_auto_clean:
+	$(RM) auto-apt-proxy.1
+	dh_auto_clean
+
+auto-apt-proxy.1: auto-apt-proxy.pod
+	pod2man --verbose --name auto-apt-proxy -c '' -r '' --utf8 $< $@ || ($(RM) $@; false)
+
+auto-apt-proxy.pod: README.md
+	sed -e 's/^#/=head1/' $< > $@ || ($(RM) $@; false)

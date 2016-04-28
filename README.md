@@ -1,10 +1,14 @@
-# About
+# NAME
+
+auto-apt-proxy - autodetect common APT proxy setups
+
+# DESCRIPTION
 
 auto-apt-proxy installs itself as a APT proxy autodetector, and detects common
 setups by checking localhost, your gateway and other "interesting" machines on
 your network for well-known APT proxies such as apt-cacher-ng and others.
 
-# License
+# COPYRIGHT
 
 Copyright (C) 2016 Antonio Terceiro
 
