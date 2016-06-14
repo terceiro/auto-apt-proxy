@@ -4,9 +4,9 @@ Priority: optional
 Maintainer: Antonio Terceiro <terceiro@debian.org>
 Build-Depends: debhelper (>=9),
 Standards-Version: 3.9.8
-Homepage: https://gitlab.com/terceiro/auto-apt-proxy
-Vcs-Git: https://gitlab.com/terceiro/auto-apt-proxy.git
-Vcs-Browser: https://gitlab.com/terceiro/auto-apt-proxy
+Homepage: https://anonscm.debian.org/git/users/terceiro/auto-apt-proxy.git
+Vcs-Git: https://anonscm.debian.org/git/users/terceiro/auto-apt-proxy.git
+Vcs-Browser: https://anonscm.debian.org/git/users/terceiro/auto-apt-proxy.git
 
 Package: auto-apt-proxy
 Architecture: all
@@ -25,10 +25,14 @@ Description: auto detect common APT proxy settings
    * docker/lxc containers, with a proxy running on the host system.
    * Virtual machines with NAT networking, with a proxy running on the host
    * system.
+   * any other system, with a proxy running on its default gateway.
+ .
+ The following APT proxy servers are supported and automatically detected:
+   * apt-cacher-ng
  .
  This package has a minimal set of dependencies in order to minimize the
  influence on systems where it is installed.
  .
- For corporate desktop deployments, where the APT proxy can be located at any
- arbitrary host, you should probably try the `squid-deb-proxy-client` package
- instead.
+ For corporate desktop/server deployments, where the APT proxy can be located
+ at any arbitrary host, you should probably try the `squid-deb-proxy-client`
+ package instead.
