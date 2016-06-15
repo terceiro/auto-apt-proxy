@@ -18,7 +18,7 @@ hit() {
 detect_apt_cacher_ng() {
   local ip="$1"
   local proxy=http://$ip:3142
-  if hit -o Acquire::http::Proxy::${ip}=none "$proxy" | grep -q -i 406.*usage.information; then
+  if hit -o "Acquire::http::Proxy::${ip}=none" "$proxy" | grep -q -i '406.*usage.information'; then
     echo "$proxy"
     exit
   fi
