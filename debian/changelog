@@ -1,5 +1,5 @@
 auto-apt-proxy (1) UNRELEASED; urgency=medium
 
-  * Initial Release.
+  * Initial Release (Closes: #827375).
 
  -- Antonio Terceiro <terceiro@debian.org>  Tue, 14 Jun 2016 12:07:54 -0300
