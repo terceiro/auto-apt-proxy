@@ -1,3 +1,9 @@
+auto-apt-proxy (1~bpo8+1) jessie-backports; urgency=medium
+
+  * Rebuild for jessie-backports.
+
+ -- Antonio Terceiro <terceiro@debian.org>  Sat, 09 Jul 2016 18:36:02 -0300
+
 auto-apt-proxy (1) unstable; urgency=medium
 
   * Initial Release (Closes: #827375).
