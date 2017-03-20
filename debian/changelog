@@ -1,3 +1,9 @@
+auto-apt-proxy (3) UNRELEASED; urgency=medium
+
+  * Add support for detecting approx
+
+ -- Antonio Terceiro <terceiro@debian.org>  Mon, 20 Mar 2017 15:44:05 -0300
+
 auto-apt-proxy (2) unstable; urgency=medium
 
   * specify `--shell dash` to shellcheck (Closes: #834976)

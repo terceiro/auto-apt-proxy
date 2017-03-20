@@ -24,7 +24,18 @@ detect_apt_cacher_ng() {
   fi
 }
 
+detect_approx() {
+  local ip="$1"
+  local proxy=http://$ip:9999
+  hit -o "Acquire::http::Proxy::${ip}=none" "$proxy" >/dev/null 2>&1 || true;
+  if [ -s "$tmpfile" ] && grep -q -i '<title>approx\s*server</title>' "$tmpfile"; then
+    echo "$proxy"
+    exit
+  fi
+}
+
 gateway=$(ip route | awk '/default/ { print($3) }')
 for ip in 127.0.0.1 $gateway; do
   detect_apt_cacher_ng "$ip"
+  detect_approx "$ip"
 done
