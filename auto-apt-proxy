@@ -34,7 +34,11 @@ detect_approx() {
   fi
 }
 
-gateway=$(ip route | awk '/default/ { print($3) }')
+if which ip >/dev/null; then
+  gateway=$(ip route | awk '/default/ { print($3) }')
+else
+  gateway=''
+fi
 for ip in 127.0.0.1 $gateway; do
   detect_apt_cacher_ng "$ip"
   detect_approx "$ip"

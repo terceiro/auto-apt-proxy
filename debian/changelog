@@ -1,6 +1,8 @@
-auto-apt-proxy (3) UNRELEASED; urgency=medium
+auto-apt-proxy (3) unstable; urgency=medium
 
   * Add support for detecting approx
+  * Handle `ip` not being available
+  * Recommends: iproute2 for `ip`
 
  -- Antonio Terceiro <terceiro@debian.org>  Mon, 20 Mar 2017 15:44:05 -0300
 
