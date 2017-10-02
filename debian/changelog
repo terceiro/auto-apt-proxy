@@ -5,7 +5,7 @@ auto-apt-proxy (3) unstable; urgency=medium
   * Recommends: iproute2 for `ip`
   * Bump Standards-Version to 4.1.1; no changes needed
 
- -- Antonio Terceiro <terceiro@debian.org>  Mon, 20 Mar 2017 15:44:05 -0300
+ -- Antonio Terceiro <terceiro@debian.org>  Mon, 02 Oct 2017 16:20:30 -0300
 
 auto-apt-proxy (2) unstable; urgency=medium
 
