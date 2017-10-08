@@ -1,6 +1,6 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: auto-apt-proxy
-Source:  https://gitlab.com/terceiro/auto-apt-proxy
+Source: https://anonscm.debian.org/git/users/terceiro/auto-apt-proxy.git
 
 Files: *
 Copyright: © 2016 Antonio Terceiro <terceiro@debian.org>
