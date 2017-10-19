@@ -14,6 +14,16 @@ hit() {
     download-file "$@" "$tmpfile" 2>&1
 }
 
+detect_apt_cacher() {
+  local ip="$1"
+  local proxy=http://$ip:3142
+  hit -o "Acquire::http::Proxy::${ip}=DIRECT" "$proxy" >/dev/null 2>&1 || true;
+  if [ -s "$tmpfile" ] && grep -q -i '<title>Apt-cacher' "$tmpfile"; then
+    echo "$proxy"
+    exit
+  fi
+}
+
 detect_apt_cacher_ng() {
   local ip="$1"
   local proxy=http://$ip:3142
@@ -41,4 +51,5 @@ fi
 for ip in 127.0.0.1 $gateway; do
   detect_apt_cacher_ng "$ip"
   detect_approx "$ip"
+  detect_apt_cacher "$ip"
 done

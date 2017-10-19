@@ -33,6 +33,7 @@ Description: automatic detector of common APT proxy settings
  The following APT proxy servers are supported and automatically detected:
    * apt-cacher-ng
    * approx
+   * apt-cacher
  .
  This package has a minimal set of dependencies in order to minimize the
  influence on systems where it is installed.
