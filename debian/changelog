@@ -1,3 +1,10 @@
+auto-apt-proxy (4) UNRELEASED; urgency=medium
+
+  * Use DIRECT for proxies values and ignore
+    Acquire::http::Proxy-Auto-Detect.
+
+ -- Thadeu Lima de Souza Cascardo <cascardo@siri.cascardo.eti.br>  Thu, 19 Oct 2017 13:53:41 -0200
+
 auto-apt-proxy (3) unstable; urgency=medium
 
   * Add support for detecting approx

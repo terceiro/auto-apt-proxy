@@ -10,15 +10,14 @@ trap cleanup INT EXIT TERM
 
 hit() {
   /usr/lib/apt/apt-helper \
-    -o Acquire::http::Proxy-Auto-Detect=none \
-    -o Acquire::http::Proxy=none \
+    -o Acquire::http::Proxy=DIRECT \
     download-file "$@" "$tmpfile" 2>&1
 }
 
 detect_apt_cacher_ng() {
   local ip="$1"
   local proxy=http://$ip:3142
-  if hit -o "Acquire::http::Proxy::${ip}=none" "$proxy" | grep -q -i '406.*usage.information'; then
+  if hit -o "Acquire::http::Proxy::${ip}=DIRECT" "$proxy" | grep -q -i '406.*usage.information'; then
     echo "$proxy"
     exit
   fi
@@ -27,7 +26,7 @@ detect_apt_cacher_ng() {
 detect_approx() {
   local ip="$1"
   local proxy=http://$ip:9999
-  hit -o "Acquire::http::Proxy::${ip}=none" "$proxy" >/dev/null 2>&1 || true;
+  hit -o "Acquire::http::Proxy::${ip}=DIRECT" "$proxy" >/dev/null 2>&1 || true;
   if [ -s "$tmpfile" ] && grep -q -i '<title>approx\s*server</title>' "$tmpfile"; then
     echo "$proxy"
     exit
