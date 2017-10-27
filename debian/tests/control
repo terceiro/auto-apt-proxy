@@ -3,3 +3,6 @@ Depends: @, clitest, apt-cacher-ng
 
 Test-Command: clitest debian/tests/approx.txt
 Depends: @, clitest, approx
+
+Test-Command: clitest debian/tests/apt-cacher.txt
+Depends: @, clitest, apt-cacher

@@ -1,10 +1,14 @@
-auto-apt-proxy (4) UNRELEASED; urgency=medium
+auto-apt-proxy (4) unstable; urgency=medium
 
+  [ Thadeu Lima de Souza Cascardo ]
   * Use DIRECT for proxies values and ignore
     Acquire::http::Proxy-Auto-Detect.
-  * Add support for apt-cacher.
+  * Add support for apt-cacher. (Closes: #878683)
 
- -- Thadeu Lima de Souza Cascardo <cascardo@siri.cascardo.eti.br>  Thu, 19 Oct 2017 13:53:41 -0200
+  [ Antonio Terceiro ]
+  * debian/tests: add test for apt-cacher detection
+
+ -- Antonio Terceiro <terceiro@debian.org>  Fri, 27 Oct 2017 15:07:33 -0200
 
 auto-apt-proxy (3) unstable; urgency=medium
 
