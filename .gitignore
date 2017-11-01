@@ -1,2 +1,4 @@
 target
 Cargo.lock
+auto-apt-proxy.1
+auto-apt-proxy.pod
