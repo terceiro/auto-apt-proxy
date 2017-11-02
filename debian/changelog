@@ -1,3 +1,11 @@
+auto-apt-proxy (5) UNRELEASED; urgency=medium
+
+  * Add wrapper mode: running `auto-apt-proxy COMMAND` will cause command to
+    be executed with the environment variables http_proxy and HTTP_PROXY set
+    to the URL of the detected proxy.
+
+ -- Antonio Terceiro <terceiro@debian.org>  Thu, 02 Nov 2017 19:24:27 -0200
+
 auto-apt-proxy (4) unstable; urgency=medium
 
   [ Thadeu Lima de Souza Cascardo ]

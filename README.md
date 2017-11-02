@@ -2,15 +2,44 @@
 
 auto-apt-proxy - autodetect common APT proxy setups
 
+# USAGE
+
+**auto-apt-proxy**
+
+**auto-apt-proxy** *[COMMAND [ARGS ...]]*
+
 # DESCRIPTION
 
-auto-apt-proxy installs itself as a APT proxy autodetector, and detects common
-setups by checking localhost, your gateway and other "interesting" machines on
-your network for well-known APT proxies such as apt-cacher-ng and others.
+**auto-apt-proxy** is an APT proxy autodetector, and detects common setups by
+checking localhost, your gateway and other "interesting" machines on your
+network for well-known APT proxies such as apt-cacher-ng and others.
+
+When called with no arguments, **auto-apt-proxy** simply prints the address of
+a detected process to the standard output. This package install an APT
+configuration file that makes APT use **auto-apt-proxy** to detect a proxy on
+every invocation of APT.
+
+When called with arguments, they are assumed to be a command. Such command will
+be executed with the common environment variables used for specifying HTTP
+proxies (*http_proxy*, *HTTP_PROXY*) set to the detected proxy. This way the
+executed command will be able to transparently use any detected APT proxy. Note
+that for this to work, any programs invoked by the given command must have
+their own support for detecting HTTP proxies from environment variables, and
+for using them.
+
+# EXAMPLES
+
+$ **auto-apt-proxy**
+
+Just prints the detected APT proxy
+
+$ **auto-apt-proxy** debootstrap sid /my/chroot
+
+Creates a new Debian *chroot* downloading packages from the local proxy.
 
 # COPYRIGHT
 
-Copyright (C) 2016 Antonio Terceiro
+Copyright (C) 2016-2017 Antonio Terceiro
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

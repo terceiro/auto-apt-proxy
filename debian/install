@@ -1,2 +1,3 @@
+misc/bash-completion/auto-apt-proxy /usr/share/bash-completion/completions
 auto-apt-proxy /usr/bin
 etc /

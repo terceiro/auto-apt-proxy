@@ -20,8 +20,9 @@ detect_apt_cacher() {
   hit -o "Acquire::http::Proxy::${ip}=DIRECT" "$proxy" >/dev/null 2>&1 || true;
   if [ -s "$tmpfile" ] && grep -q -i '<title>Apt-cacher' "$tmpfile"; then
     echo "$proxy"
-    exit
+    return 0
   fi
+  return 1
 }
 
 detect_apt_cacher_ng() {
@@ -29,8 +30,9 @@ detect_apt_cacher_ng() {
   local proxy=http://$ip:3142
   if hit -o "Acquire::http::Proxy::${ip}=DIRECT" "$proxy" | grep -q -i '406.*usage.information'; then
     echo "$proxy"
-    exit
+    return 0
   fi
+  return 1
 }
 
 detect_approx() {
@@ -39,17 +41,32 @@ detect_approx() {
   hit -o "Acquire::http::Proxy::${ip}=DIRECT" "$proxy" >/dev/null 2>&1 || true;
   if [ -s "$tmpfile" ] && grep -q -i '<title>approx\s*server</title>' "$tmpfile"; then
     echo "$proxy"
-    exit
+    return 0
   fi
+  return 1
 }
 
-if which ip >/dev/null; then
-  gateway=$(ip route | awk '/default/ { print($3) }')
+detect() {
+  if which ip >/dev/null; then
+    gateway=$(ip route | awk '/default/ { print($3) }')
+  else
+    gateway=''
+  fi
+  for ip in 127.0.0.1 $gateway; do
+    detect_apt_cacher_ng "$ip" && return 0
+    detect_approx "$ip"        && return 0
+    detect_apt_cacher "$ip"    && return 0
+  done
+  return 1
+}
+
+if [ $# -eq 0 ]; then
+  detect
 else
-  gateway=''
+  proxy=$(detect || true)
+  if [ -n "$proxy" ]; then
+    export http_proxy="$proxy"
+    export HTTP_PROXY="$proxy"
+  fi
+  exec "$@"
 fi
-for ip in 127.0.0.1 $gateway; do
-  detect_apt_cacher_ng "$ip"
-  detect_approx "$ip"
-  detect_apt_cacher "$ip"
-done

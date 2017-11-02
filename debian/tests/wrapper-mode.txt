@@ -1,0 +1,3 @@
+$ auto-apt-proxy sh -c 'echo $http_proxy; echo $HTTP_PROXY'
+http://127.0.0.1:3142
+http://127.0.0.1:3142
