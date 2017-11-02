@@ -63,10 +63,17 @@ detect() {
 if [ $# -eq 0 ]; then
   detect
 else
-  proxy=$(detect || true)
-  if [ -n "$proxy" ]; then
-    export http_proxy="$proxy"
-    export HTTP_PROXY="$proxy"
-  fi
-  exec "$@"
+  # APT mode: first argument is an URI
+  case "$1" in
+    ftp://*|http://*|https://*|file://*)
+      detect
+      ;;
+    *)
+      proxy=$(detect || true)
+      if [ -n "$proxy" ]; then
+        export http_proxy="$proxy"
+        export HTTP_PROXY="$proxy"
+      fi
+      exec "$@"
+  esac
 fi

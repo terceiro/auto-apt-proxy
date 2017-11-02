@@ -1,3 +1,6 @@
+Tests: apt-integration
+Depends: @, apt-cacher-ng
+
 Test-Command: clitest debian/tests/apt-cacher-ng.txt
 Depends: @, clitest, apt-cacher-ng
 

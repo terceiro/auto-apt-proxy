@@ -1,0 +1,8 @@
+#!/bin/sh
+
+set -eu
+
+cd ${AUTOPKGTEST_TMP:-/tmp}
+apt-get source auto-apt-proxy
+
+grep auto-apt-proxy /var/log/apt-cacher-ng/apt-cacher.log
