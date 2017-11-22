@@ -1,2 +1,6 @@
 Test-Command: clitest debian/tests/apt-cacher-ng.txt
 Depends: @, clitest, apt-cacher-ng
+
+Tests: remove, purge
+Restrictions: needs-root
+Depends: @, clitest
