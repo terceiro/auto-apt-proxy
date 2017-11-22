@@ -1,3 +1,9 @@
+auto-apt-proxy (7) unstable; urgency=medium
+
+  * Move apt configuration away on removal (Closes: #881751)
+
+ -- Antonio Terceiro <terceiro@debian.org>  Wed, 22 Nov 2017 11:52:20 -0200
+
 auto-apt-proxy (6) unstable; urgency=medium
 
   * Fix regression in wrapper mode that breaks the APT integration (!)
