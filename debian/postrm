@@ -1,0 +1,25 @@
+#! /bin/sh
+
+set -e
+aptconf=/etc/apt/apt.conf.d/auto-apt-proxy.conf
+
+case "$1" in
+    purge)
+        rm -f "$aptconf".disabled
+        ;;
+
+    remove|abort-install)
+        if [ -f "$aptconf" ]; then
+            mv "$aptconf" "$aptconf".disabled
+        fi
+        ;;
+
+    upgrade|failed-upgrade|abort-upgrade|disappear)
+        ;;
+
+    *)
+        echo "postrm called with unknown argument \`$1'" >&2
+        exit 1
+esac
+
+##DEBHELPER##
