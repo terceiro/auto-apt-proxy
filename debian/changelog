@@ -1,3 +1,10 @@
+auto-apt-proxy (8) unstable; urgency=medium
+
+  * debian/tests: remove pointless "purge" test
+  * preinst: put configuration file back in place on reinstalls
+
+ -- Antonio Terceiro <terceiro@debian.org>  Mon, 27 Nov 2017 13:50:22 -0200
+
 auto-apt-proxy (7) unstable; urgency=medium
 
   * Move apt configuration away on removal (Closes: #881751)
