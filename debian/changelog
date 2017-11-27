@@ -1,8 +1,9 @@
 auto-apt-proxy (2+deb9u1) stretch; urgency=medium
 
-  * Move apt configuration away on removal (Closes: #881751)
+  * Move apt configuration away on removal, and put it back on reinstalls
+    (Closes: #881751)
 
- -- Antonio Terceiro <terceiro@debian.org>  Sun, 26 Nov 2017 14:14:31 -0200
+ -- Antonio Terceiro <terceiro@debian.org>  Mon, 27 Nov 2017 13:55:16 -0200
 
 auto-apt-proxy (2) unstable; urgency=medium
 
