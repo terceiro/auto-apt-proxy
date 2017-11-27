@@ -13,6 +13,6 @@ Depends: @, clitest, apt-cacher
 Test-Command: clitest debian/tests/wrapper-mode.txt
 Depends: @, clitest, apt-cacher-ng
 
-Tests: remove, purge
+Tests: remove
 Restrictions: needs-root
 Depends: @, clitest
