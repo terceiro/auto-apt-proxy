@@ -1,0 +1,10 @@
+#! /bin/sh
+
+set -e
+aptconf=/etc/apt/apt.conf.d/auto-apt-proxy.conf
+
+if [ -e "$aptconf".disabled ]; then
+    mv "$aptconf".disabled "$aptconf"
+fi
+
+##DEBHELPER##
