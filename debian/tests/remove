@@ -3,8 +3,6 @@
 set -e
 exec 2>&1
 
-action="$(basename "$0")"
-
 set -x
-apt-get "$action" -qy auto-apt-proxy
+apt-get remove -qy auto-apt-proxy
 apt-get update
