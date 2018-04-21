@@ -5,7 +5,7 @@ Maintainer: Antonio Terceiro <terceiro@debian.org>
 Build-Depends: debhelper (>= 11~),
                dpkg-dev (>= 1.17.14~),
                shellcheck <!nocheck>,
-Standards-Version: 4.1.1
+Standards-Version: 4.1.4
 Homepage: https://anonscm.debian.org/git/users/terceiro/auto-apt-proxy.git
 Vcs-Git: https://anonscm.debian.org/git/users/terceiro/auto-apt-proxy.git
 Vcs-Browser: https://anonscm.debian.org/git/users/terceiro/auto-apt-proxy.git
