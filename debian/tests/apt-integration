@@ -3,6 +3,8 @@
 set -eu
 
 cd ${AUTOPKGTEST_TMP:-/tmp}
+unset no_proxy
+
 apt-get source auto-apt-proxy
 
 grep auto-apt-proxy /var/log/apt-cacher-ng/apt-cacher.log
