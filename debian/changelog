@@ -1,3 +1,10 @@
+auto-apt-proxy (10) unstable; urgency=medium
+
+  * Exit with 0 even when no proxy can be detected. This prevents apt from
+    failing when the proxy is down, or when there is none.
+
+ -- Antonio Terceiro <terceiro@debian.org>  Sat, 05 May 2018 14:17:59 -0300
+
 auto-apt-proxy (9) unstable; urgency=medium
 
   * debian/tests/{remove,reinstall}: drop unnecessary $action variable

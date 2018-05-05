@@ -57,7 +57,7 @@ detect() {
     detect_approx "$ip"        && return 0
     detect_apt_cacher "$ip"    && return 0
   done
-  return 1
+  return 0
 }
 
 if [ $# -eq 0 ]; then
