@@ -3,7 +3,7 @@ Upstream-Name: auto-apt-proxy
 Source: https://anonscm.debian.org/git/users/terceiro/auto-apt-proxy.git
 
 Files: *
-Copyright: © 2016 Antonio Terceiro <terceiro@debian.org>
+Copyright: © 2016-2018 Antonio Terceiro <terceiro@debian.org>
 License: GPL-3.0+
 
 License: GPL-3.0+

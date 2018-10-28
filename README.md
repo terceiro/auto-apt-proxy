@@ -39,7 +39,7 @@ Creates a new Debian *chroot* downloading packages from the local proxy.
 
 # COPYRIGHT
 
-Copyright (C) 2016-2017 Antonio Terceiro
+Copyright (C) 2016-2018 Antonio Terceiro
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
