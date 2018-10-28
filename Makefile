@@ -14,5 +14,5 @@ clean:
 test: check
 
 check:
-	shellcheck --shell dash auto-apt-proxy
+	-shellcheck --shell dash auto-apt-proxy
 
