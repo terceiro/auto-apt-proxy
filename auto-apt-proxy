@@ -47,7 +47,7 @@ detect_approx() {
 }
 
 detect() {
-  if which ip >/dev/null; then
+  if command -v ip >/dev/null; then
     gateway=$(ip route | awk '/default/ { print($3) }')
   else
     gateway=''
