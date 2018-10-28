@@ -63,12 +63,13 @@ detect() {
 if [ $# -eq 0 ]; then
   detect
 else
-  # APT mode: first argument is an URI
   case "$1" in
     ftp://*|http://*|https://*|file://*)
+      # APT mode: first argument is an URI
       detect
       ;;
     *)
+      # wrapper mode: execute command using the detected proxy
       proxy=$(detect || true)
       if [ -n "$proxy" ]; then
         export http_proxy="$proxy"
