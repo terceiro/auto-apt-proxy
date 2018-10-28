@@ -4,6 +4,7 @@ auto-apt-proxy (11) unstable; urgency=medium
   * Makefile: make shellcheck test non-fatal (Closes: #912111)
   * Update copyright notices
   * Bump Standards-Version to 4.2.1; no changes needed.
+  * debian/rules: set Rules-Require-Root: no
 
  -- Antonio Terceiro <terceiro@debian.org>  Sun, 28 Oct 2018 09:35:05 -0300
 
