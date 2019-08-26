@@ -13,7 +13,7 @@ Rules-Requires-Root: no
 
 Package: auto-apt-proxy
 Architecture: all
-Recommends: iproute2,
+Recommends: iproute2 | busybox,
 Depends: apt,
          ${misc:Depends},
          ${shlibs:Depends},
