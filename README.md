@@ -30,7 +30,7 @@ for using them.
 # CONFIGURATION
 
 When your apt proxy is installed on localhost or your default gateway,
-it should Just Work.  If you install is somewhere else, you can create
+it should Just Work.  If you install it somewhere else, you can create
 an explicit SRV record to tell auto-apt-proxy about it.
 
 Suppose your corporate domain is "example.com", and
