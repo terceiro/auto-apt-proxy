@@ -46,7 +46,35 @@ detect_approx() {
   return 1
 }
 
+# NOTE: This does NOT check MDNS/DNS-SD (avahi/zeroconf/bonjour) records.
+#       If you want that, use squid-deb-proxy-client, which depends on avahi.
+#
+# FIXME: if there are multiple matching SRV records, we should make a
+#        weighted random choice from the one(s) with the highest priority.
+#        For now, we make a uniformly random choice from all records (shuf + exit).
+#
+# NOTE: We don't check that it "looks like" a known apt proxy (hit + grep -q).
+#       This is because
+#        1) the other detectors are just GUESSING hosts and ports.
+#           You might accidentally run a non-apt-proxy on 127.0.0.1:9999, but
+#           you can't accidentally create an _apt_proxy SRV record!
+#        2) refactoring the grep -q's out of detect_* is tedious and boring.
+#        3) there's no grep -q for squid, which I want to use. ;-)
+#
+# NOTE: no need for if/then/else and return 0/1 because:
+#        * if awk matches something, it prints it and exits zero.
+#        * if hostname or apt-helper fail, awk matches nothing, so exits non-zero.
+#        * set -e ignores errors from apt-helper (no pipefail) and hostname (no ???).
+detect_DNS_SRV_record() {
+  /usr/lib/apt/apt-helper srv-lookup _apt_proxy._tcp."$(hostname --domain)" 2>/dev/null |
+  shuf |
+  awk '/^[^#]/{print "http://" $1 ":" $4;found=1;exit}END{exit !found}'
+}
+
 detect() {
+  # If a SRV record is found, use it and guess no further.
+  detect_DNS_SRV_record && return 0
+
   if command -v ip >/dev/null; then
     gateway=$(ip route | awk '/default/ { print($3) }')
   elif busybox ip >/dev/null 2>&1; then

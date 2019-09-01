@@ -35,10 +35,10 @@ Description: automatic detector of common APT proxy settings
    * apt-cacher-ng
    * approx
    * apt-cacher
+   * any proxy advertised by an _apt_proxy._tcp SRV record in your domain
  .
  This package has a minimal set of dependencies in order to minimize the
  influence on systems where it is installed.
  .
- For corporate desktop/server deployments, where the APT proxy can be located
- at any arbitrary host, you should probably try the `squid-deb-proxy-client`
- package instead.
+ This package does not query mDNS SRV records, which would require avahi.
+ If you need that, consider the `squid-deb-proxy-client` package instead.

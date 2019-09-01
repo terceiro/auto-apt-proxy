@@ -27,6 +27,24 @@ that for this to work, any programs invoked by the given command must have
 their own support for detecting HTTP proxies from environment variables, and
 for using them.
 
+# CONFIGURATION
+
+When your apt proxy is installed on localhost or your default gateway,
+it should Just Work.  If you install is somewhere else, you can create
+an explicit SRV record to tell auto-apt-proxy about it.
+
+Suppose your corporate domain is "example.com", and
+apt-cacher-ng is installed on "apt-cacher-ng.example.com", and
+auto-apt-proxy is installed on "alices-laptop.example.com".
+
+The appropriate SRV record in dnsmasq.conf would look like this:
+
+    srv-host=_apt_proxy._tcp.example.com,apt-cacher-ng.example.com,3142
+
+The appropriate nsd/bind zonefile entry would look like this (untested):
+
+    _apt_proxy._tcp.@  IN SRV 0 0 3142 apt-cacher-ng.@
+
 # EXAMPLES
 
 $ **auto-apt-proxy**
