@@ -1,3 +1,16 @@
+auto-apt-proxy (12) unstable; urgency=medium
+
+  [ Trent W. Buck ]
+  * Try "busybox ip route" when "ip route" is not available.
+  * Use apt-helper to find apt proxy via _apt_proxy._tcp DNS record
+    (Closes: #935495)
+
+  [ Antonio Terceiro ]
+  * autopkgtest: give names to all tests
+  * Timeout each request to potential proxies at 5s (Closes: #939046)
+
+ -- Antonio Terceiro <terceiro@debian.org>  Mon, 02 Sep 2019 13:00:41 -0300
+
 auto-apt-proxy (11) unstable; urgency=medium
 
   * Replace `which` with `command -v`
