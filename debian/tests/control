@@ -3,15 +3,19 @@ Depends: @, apt-cacher-ng
 
 Test-Command: clitest debian/tests/apt-cacher-ng.txt
 Depends: @, clitest, apt-cacher-ng
+Features: test-name=apt-cacher-ng
 
 Test-Command: clitest debian/tests/approx.txt
 Depends: @, clitest, approx
+Features: test-name=approx
 
 Test-Command: clitest debian/tests/apt-cacher.txt
 Depends: @, clitest, apt-cacher
+Features: test-name=apt-cacher
 
 Test-Command: clitest debian/tests/wrapper-mode.txt
 Depends: @, clitest, apt-cacher-ng
+Features: test-name=wrapper-mode
 
 Tests: remove, reinstall
 Restrictions: needs-root
