@@ -20,3 +20,7 @@ Features: test-name=wrapper-mode
 Tests: remove, reinstall
 Restrictions: needs-root
 Depends: @, clitest
+
+Tests: timeout
+Depends: @, ruby-rack
+Restrictions: allow-stderr

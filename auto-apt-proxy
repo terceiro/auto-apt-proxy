@@ -9,7 +9,7 @@ cleanup() {
 trap cleanup INT EXIT TERM
 
 hit() {
-  /usr/lib/apt/apt-helper \
+  timeout 5 /usr/lib/apt/apt-helper \
     -o Acquire::http::Proxy=DIRECT \
     download-file "$@" "$tmpfile" 2>&1
 }

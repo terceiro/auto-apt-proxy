@@ -1,0 +1,23 @@
+#!/bin/sh
+
+set -eu
+
+cd ${AUTOPKGTEST_TMP:-${TMPDIR:-/tmp}}
+
+# Run a fake proxy on localhost:9999 that takes 1h to respond to simulate an
+# approx proxy that is behind some port filtering and takes forever to respond.
+cat > config.ru <<PROXY
+class TimeoutProxy
+  def call(env)
+    sleep(60*60)
+  end
+end
+run TimeoutProxy.new
+PROXY
+rackup --daemonize --pid proxy.pid --port 9999
+trap 'kill -9 $(cat proxy.pid)' INT TERM EXIT
+
+set -x
+
+# auto-apt-proxy should timeout and exit 0 in less than 10 seconds
+timeout --signal=KILL 10 auto-apt-proxy
