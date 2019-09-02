@@ -8,6 +8,7 @@ auto-apt-proxy (12) unstable; urgency=medium
   [ Antonio Terceiro ]
   * autopkgtest: give names to all tests
   * Timeout each request to potential proxies at 5s (Closes: #939046)
+  * Bump Standards-Version to 4.4.0; no changes needed
 
  -- Antonio Terceiro <terceiro@debian.org>  Mon, 02 Sep 2019 13:00:41 -0300
 
