@@ -45,6 +45,13 @@ The appropriate nsd/bind zonefile entry would look like this (untested):
 
     _apt_proxy._tcp.@  IN SRV 0 0 3142 apt-cacher-ng.@
 
+# CACHING
+
+By default, auto-apt-proxy will cache its results for 60 seconds.
+
+To disable the cache, set the `AUTO_APT_PROXY_NO_CACHE` environment variable to
+any non-empty string.
+
 # EXAMPLES
 
 $ **auto-apt-proxy**

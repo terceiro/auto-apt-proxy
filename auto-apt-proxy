@@ -30,6 +30,50 @@ hit() {
     download-file "$@" "$tmpfile" 2>&1
 }
 
+uid=$(id -u)
+cache_dir=${TMPDIR:-/tmp}/.auto-apt-proxy-${uid}
+if [ -d "${cache_dir}" ]; then
+  # require existing cache dir to be owned by the current user and have the
+  # correct permissions
+  owner="$(stat --format=%u:%f "${cache_dir}")"
+  if [ "${uid}:41c0" = "${cache_dir}" ]; then
+    echo "E: insecure cache dir ${uid}"
+    exit 1
+  fi
+else
+  mkdir -m 0700 "${cache_dir}"
+fi
+cache_ttl=60 # seconds
+cache() {
+  local cache_file="${cache_dir}/cache"
+  local lock_file="${cache_dir}/lock"
+  local cache_age
+  (
+    flock 9
+
+    # invalidate stale cache
+    if [ -f "${cache_file}" ]; then
+      ts=$(stat --format=%Y "${cache_file}")
+      now=$(date +%s)
+      cache_age=$((now - ts))
+      if [ "${cache_age}" -gt "${cache_ttl}" ]; then
+        rm -f "${cache_file}"
+      fi
+    fi
+
+    if [ -f "${cache_file}" ]; then
+      # read cache
+      if [ -s "${cache_file}" ]; then
+        cat "${cache_file}"
+      fi
+    else
+      # update cache
+      "$@" > "$cache_file" || true
+      cat "${cache_file}"
+    fi
+  ) 9> "${lock_file}"
+}
+
 detect_apt_cacher() {
   local ip="$1"
   local proxy=http://$ip:3142
@@ -87,7 +131,7 @@ detect_DNS_SRV_record() {
   awk '/^[^#]/{print "http://" $1 ":" $4;found=1;exit}END{exit !found}'
 }
 
-detect() {
+__detect__() {
   # If a SRV record is found, use it and guess no further.
   detect_DNS_SRV_record && return 0
 
@@ -104,6 +148,14 @@ detect() {
     detect_apt_cacher "$ip"    && return 0
   done
   return 0
+}
+
+detect() {
+  if [ -z "${AUTO_APT_PROXY_NO_CACHE:-}" ]; then
+    cache __detect__
+  else
+    __detect__
+  fi
 }
 
 if [ $# -eq 0 ]; then
