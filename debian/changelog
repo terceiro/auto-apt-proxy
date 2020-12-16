@@ -1,3 +1,10 @@
+auto-apt-proxy (13) unstable; urgency=medium
+
+  * Cache results for 60s
+  * Allow local user to specify an explicit proxy host
+
+ -- Antonio Terceiro <terceiro@debian.org>  Wed, 16 Dec 2020 17:48:15 -0300
+
 auto-apt-proxy (12) unstable; urgency=medium
 
   [ Trent W. Buck ]
