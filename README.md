@@ -45,6 +45,15 @@ The appropriate nsd/bind zonefile entry would look like this (untested):
 
     _apt_proxy._tcp.@  IN SRV 0 0 3142 apt-cacher-ng.@
 
+As an alternative to an SRV record, one can also define a special hostname
+which needs to be resolved via DNS or local */etc/hosts* file, called
+**apt-proxy**.  For example, if your network has a local apt proxy at 9.9.9.9,
+then add this line to */etc/hosts*:
+
+```
+9.9.9.9    apt-proxy
+```
+
 # CACHING
 
 By default, auto-apt-proxy will cache its results for 60 seconds.

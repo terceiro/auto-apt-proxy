@@ -142,7 +142,11 @@ __detect__() {
   else
     gateway=''
   fi
-  for ip in 127.0.0.1 $gateway; do
+
+  # consider a user-defined host as well, quick check whether it's configured
+  explicit_proxy=$(getent hosts apt-proxy | awk '/[:blank:]/ { print($1) }' )
+
+  for ip in $explicit_proxy 127.0.0.1 $gateway; do
     detect_apt_cacher_ng "$ip" && return 0
     detect_approx "$ip"        && return 0
     detect_apt_cacher "$ip"    && return 0
