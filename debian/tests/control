@@ -24,3 +24,7 @@ Depends: @, clitest
 Tests: timeout
 Depends: @, ruby-rack
 Restrictions: allow-stderr
+
+Tests: insecure-cache-dir
+Depends: @
+Restrictions: needs-root, allow-stderr

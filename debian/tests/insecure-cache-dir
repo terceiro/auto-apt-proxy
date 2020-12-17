@@ -1,0 +1,12 @@
+#!/bin/sh
+
+set -exu
+
+uid=$(id -u ${AUTOPKGTEST_NORMAL_USER})
+mkdir /tmp/.auto-apt-proxy-${uid}
+rc=0
+runuser -u "${AUTOPKGTEST_NORMAL_USER}" auto-apt-proxy || rc=$?
+test "${rc}" -ne 0
+
+rmdir /tmp/.auto-apt-proxy-${uid}
+runuser -u "${AUTOPKGTEST_NORMAL_USER}" auto-apt-proxy
