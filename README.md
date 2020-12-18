@@ -50,9 +50,7 @@ which needs to be resolved via DNS or local */etc/hosts* file, called
 **apt-proxy**.  For example, if your network has a local apt proxy at 9.9.9.9,
 then add this line to */etc/hosts*:
 
-```
-9.9.9.9    apt-proxy
-```
+    9.9.9.9    apt-proxy
 
 # CACHING
 
