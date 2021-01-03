@@ -126,9 +126,15 @@ detect_approx() {
 #        * if hostname or apt-helper fail, awk matches nothing, so exits non-zero.
 #        * set -e ignores errors from apt-helper (no pipefail) and hostname (no ???).
 detect_DNS_SRV_record() {
-  /usr/lib/apt/apt-helper srv-lookup _apt_proxy._tcp."$(hostname --domain)" 2>/dev/null |
-  shuf |
-  awk '/^[^#]/{print "http://" $1 ":" $4;found=1;exit}END{exit !found}'
+  local domain
+  domain="$(hostname --domain 2>/dev/null)"
+  if [ -n "${domain}" ]; then
+    /usr/lib/apt/apt-helper srv-lookup _apt_proxy._tcp."${domain}" 2>/dev/null |
+      shuf |
+      awk '/^[^#]/{print "http://" $1 ":" $4;found=1;exit}END{exit !found}'
+  else
+    return 1
+  fi
 }
 
 __detect__() {
