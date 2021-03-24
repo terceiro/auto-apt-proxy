@@ -25,11 +25,11 @@ Description: automatic detector of common APT proxy settings
  This package is most useful for development environments, and will Do The
  Right Thing for:
  .
-   * build chroots, with a proxy running on the host system.
-   * docker/lxc containers, with a proxy running on the host system.
+   * Build chroots, with a proxy running on the host system.
+   * Docker/lxc containers, with a proxy running on the host system.
    * Virtual machines with NAT networking, with a proxy running on the host
-   * system.
-   * any other system, with a proxy running on its default gateway.
+     system.
+   * Any other system, with a proxy running on its default gateway.
  .
  The following APT proxy servers are supported and automatically detected:
    * apt-cacher-ng
