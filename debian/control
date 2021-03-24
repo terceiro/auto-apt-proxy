@@ -19,17 +19,19 @@ Depends: apt,
          ${shlibs:Depends},
 Description: automatic detector of common APT proxy settings
  auto-apt-proxy installs itself as an APT proxy autodetector, and detects
- common setups by checking localhost and the network default gateway for
- well-known APT proxies such as apt-cacher-ng.
+ common setups by checking some hosts on the local network for well-known APT
+ proxies such as apt-cacher-ng.
  .
  This package is most useful for development environments, and will Do The
- Right Thing for:
+ Right Thing for at least these cases:
  .
    * Build chroots, with a proxy running on the host system.
    * Docker/lxc containers, with a proxy running on the host system.
    * Virtual machines with NAT networking, with a proxy running on the host
      system.
    * Any other system, with a proxy running on its default gateway.
+   * Systems where the `apt-proxy` hostname resolves to a valid IP address
+     and a supported proxy is detected at that address.
  .
  The following APT proxy servers are supported and automatically detected:
    * apt-cacher-ng
