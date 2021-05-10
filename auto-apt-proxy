@@ -143,7 +143,7 @@ __detect__() {
 
   if command -v ip >/dev/null; then
     gateway=$(ip route | awk '/default/ { print($3) }')
-  elif busybox ip >/dev/null 2>&1; then
+  elif busybox ip --help >/dev/null 2>&1; then
     gateway=$(busybox ip route | awk '/default/ { print($3) }')
   else
     gateway=''
