@@ -1,3 +1,22 @@
+auto-apt-proxy (13.2) unstable; urgency=medium
+
+  [ Antonio Terceiro ]
+  * Minor documentation update
+  * README.md: fix indentation in manpage
+  * Avoid warning from `hostname` when domain can't be determined
+  * Mention the DNS support in the package description
+  * Fix busybox detection.
+    Invoking just `busybox ip` will always fail because it's missing a
+    subcommand, and `busybox ip` will fail with a usage message. Adding
+    `--help` makes the command succeed if busybox is installed and the `ip`
+    applet is compiled in (what is the default in Debian anyway).
+    (Closes: #988262)
+
+  [ Ansgar Burchardt ]
+  * Update package description
+
+ -- Antonio Terceiro <terceiro@debian.org>  Mon, 10 May 2021 18:38:51 -0300
+
 auto-apt-proxy (13.1) unstable; urgency=medium
 
   * Fix check for insecure cache dir
