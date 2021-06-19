@@ -1,3 +1,9 @@
+auto-apt-proxy (13.3) unstable; urgency=medium
+
+  * autopkgtest: cope with auto-apt-proxy being pre-installed (Closes: #989776)
+
+ -- Antonio Terceiro <terceiro@debian.org>  Fri, 18 Jun 2021 22:51:34 -0300
+
 auto-apt-proxy (13.2) unstable; urgency=medium
 
   [ Antonio Terceiro ]
