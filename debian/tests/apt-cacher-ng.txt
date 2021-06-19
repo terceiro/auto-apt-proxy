@@ -1,2 +1,3 @@
+$ export AUTO_APT_PROXY_NO_CACHE=1
 $ auto-apt-proxy 
 http://127.0.0.1:3142
