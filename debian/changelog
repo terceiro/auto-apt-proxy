@@ -1,3 +1,18 @@
+auto-apt-proxy (13.4) unstable; urgency=medium
+
+  [ Julian Andres Klode ]
+  * Avoid retries when proving for proxies.
+    Pass -o Acquire::Retries=0 to apt-helper, such that apt doesn't retry
+    the proxy probing, which now has exponential backoff in 2.3.7
+    (Closes: #992147)
+
+  [ Antonio Terceiro ]
+  * timeout after 5s when looking `auto-apt-proxy` up.
+    If a DNS lookup for the proxy takes too long, we don't to want to use it
+    anyway. (Closes: #979132)
+
+ -- Antonio Terceiro <terceiro@debian.org>  Sun, 22 Aug 2021 20:58:06 -0300
+
 auto-apt-proxy (13.3) unstable; urgency=medium
 
   * autopkgtest: cope with auto-apt-proxy being pre-installed (Closes: #989776)
