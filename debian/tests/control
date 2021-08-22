@@ -21,7 +21,7 @@ Tests: remove, reinstall
 Restrictions: needs-root
 Depends: @, clitest
 
-Tests: timeout
+Tests: timeout, getent-timeout
 Depends: @, ruby-rack
 Restrictions: allow-stderr
 

@@ -1,0 +1,22 @@
+#!/bin/sh
+
+exec 2>&1
+set -eu
+
+export AUTO_APT_PROXY_NO_CACHE=1
+cd ${AUTOPKGTEST_TMP:-${TMPDIR:-/tmp}}
+
+mkdir bin
+cat > bin/getent <<EOF
+#!/bin/sh
+set -eu
+sleep 3600
+echo 127.0.0.1 auto-apt-proxy
+EOF
+chmod +x bin/getent
+
+export PATH=$(pwd)/bin:${PATH}
+set -x
+
+# auto-apt-proxy should timeout and exit 0 in less than 10 seconds
+timeout --signal=KILL 10 auto-apt-proxy
