@@ -1,3 +1,10 @@
+auto-apt-proxy (13.5) unstable; urgency=medium
+
+  * autopkgtest: timeout: depend on ruby-webrick
+  * Bump Standards-Version to 4.6.0; no changed needed
+
+ -- Antonio Terceiro <terceiro@debian.org>  Sat, 19 Feb 2022 10:26:19 -0300
+
 auto-apt-proxy (13.4) unstable; urgency=medium
 
   [ Julian Andres Klode ]
