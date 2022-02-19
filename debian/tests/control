@@ -22,7 +22,7 @@ Restrictions: needs-root
 Depends: @, clitest
 
 Tests: timeout, getent-timeout
-Depends: @, ruby-rack
+Depends: @, ruby-rack, ruby-webrick
 Restrictions: allow-stderr
 
 Tests: insecure-cache-dir
