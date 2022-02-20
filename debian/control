@@ -37,6 +37,7 @@ Description: automatic detector of common APT proxy settings
    * apt-cacher-ng
    * approx
    * apt-cacher
+   * squid-deb-proxy
    * any proxy advertised by an _apt_proxy._tcp SRV record in your domain
  .
  This package has a minimal set of dependencies in order to minimize the

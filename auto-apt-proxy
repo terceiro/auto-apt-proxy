@@ -108,6 +108,18 @@ detect_approx() {
 
 # NOTE: This does NOT check MDNS/DNS-SD (avahi/zeroconf/bonjour) records.
 #       If you want that, use squid-deb-proxy-client, which depends on avahi.
+detect_squid_deb_proxy() {
+  local ip="$1"
+  local proxy=http://$ip:8000
+  if hit -oDebug::acquire::http=1 -o "Acquire::http::Proxy::${ip}=DIRECT" "$proxy" 2>&1 | grep -q 'Via: .*squid-deb-proxy'; then
+    echo "$proxy"
+    return 0
+  fi
+  return 1
+}
+
+# NOTE: This does NOT check MDNS/DNS-SD (avahi/zeroconf/bonjour) records.
+#       If you want that, use squid-deb-proxy-client, which depends on avahi.
 #
 # FIXME: if there are multiple matching SRV records, we should make a
 #        weighted random choice from the one(s) with the highest priority.
@@ -153,9 +165,10 @@ __detect__() {
   explicit_proxy=$(timeout 5 getent hosts apt-proxy | awk '/[:blank:]/ { print($1) }' )
 
   for ip in $explicit_proxy 127.0.0.1 $gateway; do
-    detect_apt_cacher_ng "$ip" && return 0
-    detect_approx "$ip"        && return 0
-    detect_apt_cacher "$ip"    && return 0
+    detect_apt_cacher_ng "$ip"   && return 0
+    detect_approx "$ip"          && return 0
+    detect_apt_cacher "$ip"      && return 0
+    detect_squid_deb_proxy "$ip" && return 0
   done
   return 0
 }
