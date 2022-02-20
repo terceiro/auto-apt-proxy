@@ -1,3 +1,11 @@
+auto-apt-proxy (14) unstable; urgency=medium
+
+  [ Paride Legovini ]
+  * Detect squid-deb-proxy
+  * Add autopkgtest for squid-deb-proxy
+
+ -- Antonio Terceiro <terceiro@debian.org>  Sun, 20 Feb 2022 17:12:27 -0300
+
 auto-apt-proxy (13.5) unstable; urgency=medium
 
   * autopkgtest: timeout: depend on ruby-webrick
