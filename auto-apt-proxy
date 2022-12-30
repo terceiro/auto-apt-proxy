@@ -18,18 +18,6 @@
 
 set -e
 
-tmpfile=$(mktemp)
-cleanup() {
-  rm -f "$tmpfile"
-}
-trap cleanup INT EXIT TERM
-
-hit() {
-  timeout 5 /usr/lib/apt/apt-helper \
-    -o Acquire::http::Proxy=DIRECT -o Acquire::Retries=0 \
-    download-file "$@" "$tmpfile" 2>&1
-}
-
 uid=$(id -u)
 cache_dir=${TMPDIR:-/tmp}/.auto-apt-proxy-${uid}
 if [ -d "${cache_dir}" ]; then
@@ -43,6 +31,19 @@ if [ -d "${cache_dir}" ]; then
 else
   mkdir -m 0700 "${cache_dir}"
 fi
+
+tmpfile=$(mktemp)
+cleanup() {
+  rm -f "$tmpfile"
+}
+trap cleanup INT EXIT TERM
+
+hit() {
+  timeout 5 /usr/lib/apt/apt-helper \
+    -o Acquire::http::Proxy=DIRECT -o Acquire::Retries=0 \
+    download-file "$@" "$tmpfile" 2>&1
+}
+
 cache_ttl=60 # seconds
 cache() {
   local cache_file="${cache_dir}/cache"
