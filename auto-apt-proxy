@@ -32,16 +32,16 @@ else
   mkdir -m 0700 "${cache_dir}"
 fi
 
-tmpfile=$(mktemp)
+output="${cache_dir}/output"
 cleanup() {
-  rm -f "$tmpfile"
+  rm -f "$output"
 }
 trap cleanup INT EXIT TERM
 
 hit() {
   timeout 5 /usr/lib/apt/apt-helper \
     -o Acquire::http::Proxy=DIRECT -o Acquire::Retries=0 \
-    download-file "$@" "$tmpfile" 2>&1
+    download-file "$@" "$output" 2>&1
 }
 
 cache_ttl=60 # seconds
@@ -79,7 +79,7 @@ detect_apt_cacher() {
   local ip="$1"
   local proxy=http://$ip:3142
   hit -o "Acquire::http::Proxy::${ip}=DIRECT" "$proxy" >/dev/null 2>&1 || true;
-  if [ -s "$tmpfile" ] && grep -q -i '<title>Apt-cacher' "$tmpfile"; then
+  if [ -s "$output" ] && grep -q -i '<title>Apt-cacher' "$output"; then
     echo "$proxy"
     return 0
   fi
@@ -100,7 +100,7 @@ detect_approx() {
   local ip="$1"
   local proxy=http://$ip:9999
   hit -o "Acquire::http::Proxy::${ip}=DIRECT" "$proxy" >/dev/null 2>&1 || true;
-  if [ -s "$tmpfile" ] && grep -q -i '<title>approx\s*server</title>' "$tmpfile"; then
+  if [ -s "$output" ] && grep -q -i '<title>approx\s*server</title>' "$output"; then
     echo "$proxy"
     return 0
   fi
