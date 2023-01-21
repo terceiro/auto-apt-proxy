@@ -164,7 +164,10 @@ __detect__() {
   # consider a user-defined host as well, quick check whether it's configured
   explicit_proxy=$(timeout 5 getent hosts apt-proxy | awk '/[:blank:]/ { print($1) }' )
 
-  for ip in $explicit_proxy 127.0.0.1 $gateway; do
+  # check for proxies that might have already been configured before the installation of auto-apt-proxy
+  existing_apt_proxy_ips=$(apt-config dump | grep Acquire.*proxy.*http://.* | grep -Eo "(http)://[a-zA-Z0-9./?=_%:-]*" | awk -F[/:] '{print $4}')
+
+  for ip in $explicit_proxy 127.0.0.1 $gateway $existing_apt_proxy_ips; do
     detect_apt_cacher_ng "$ip"   && return 0
     detect_approx "$ip"          && return 0
     detect_apt_cacher "$ip"      && return 0
