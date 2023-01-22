@@ -173,6 +173,7 @@ __detect__() {
     detect_apt_cacher "$ip"      && return 0
     detect_squid_deb_proxy "$ip" && return 0
   done
+  echo "DIRECT"
   return 0
 }
 
