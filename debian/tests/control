@@ -1,10 +1,6 @@
 Tests: apt-integration
 Depends: @, apt-cacher-ng
 
-Test-Command: clitest debian/tests/squid-deb-proxy.txt
-Depends: @, clitest, squid-deb-proxy
-Features: test-name=squid-deb-proxy
-
 Test-Command: clitest debian/tests/apt-cacher-ng.txt
 Depends: @, clitest, apt-cacher-ng
 Features: test-name=apt-cacher-ng
