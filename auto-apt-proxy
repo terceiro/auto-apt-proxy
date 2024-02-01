@@ -119,9 +119,6 @@ detect_squid_deb_proxy() {
   return 1
 }
 
-# NOTE: This does NOT check MDNS/DNS-SD (avahi/zeroconf/bonjour) records.
-#       If you want that, use squid-deb-proxy-client, which depends on avahi.
-#
 # FIXME: if there are multiple matching SRV records, we should make a
 #        weighted random choice from the one(s) with the highest priority.
 #        For now, we make a uniformly random choice from all records (shuf + exit).
@@ -150,9 +147,28 @@ detect_DNS_SRV_record() {
   fi
 }
 
+# NOTE: MDNS resolution is opportunistic.
+#       If the avahi-browse binary is not present, MDNS is skipped.  This avoids
+#       creating a dependency on the avahi-utils package, which is neither present
+#       nor desirable in some environments.
+#
+#       If MNDS support is desired, install the avahi-utils package.
+detect_MDNS_record() {
+  if [ $(which avahi-browse) ]; then
+    avahi-browse -t -r -p _apt_proxy._tcp | 
+      shuf | 
+      awk -F ';' '/^=.*/{print "http://" $8 ":" $9;found=1;exit}END{exit !found}'
+  else
+    return 1
+  fi
+}
+
 __detect__() {
   # If a SRV record is found, use it and guess no further.
   detect_DNS_SRV_record && return 0
+
+  # If an MDNS record is found, use it and guess no further.
+  detect_MDNS_record && return 0
 
   if command -v ip >/dev/null; then
     gateway=$(ip route | awk '/default/ { print($3) }')
