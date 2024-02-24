@@ -1,3 +1,9 @@
+auto-apt-proxy (14.1) unstable; urgency=medium
+
+  * autopkgtest: drop test for squid-deb-proxy (Closes: #1033530)
+
+ -- Antonio Terceiro <terceiro@debian.org>  Tue, 28 Mar 2023 21:56:37 -0300
+
 auto-apt-proxy (14) unstable; urgency=medium
 
   [ Paride Legovini ]
