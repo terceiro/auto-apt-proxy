@@ -161,22 +161,34 @@ detect_DNS_SRV_record() {
   fi
 }
 
+find_gateway() {
+  local gateway
+  if command -v ip >/dev/null; then
+    gateway=$(ip "$@" route | awk '/default/ { print($3) }')
+  elif busybox ip --help >/dev/null 2>&1; then
+    gateway=$(busybox ip "$@" route | awk '/default/ { print($3) }')
+  else
+    gateway=''
+  fi
+  echo $gateway
+}
+
+resolve_getent() {
+  timeout 5 getent "$@" | awk '/[:blank:]/ { if ($2 == "STREAM") {print($1)} }' | uniq
+}
+
 __detect__() {
   # If a SRV record is found, use it and guess no further.
   detect_DNS_SRV_record && return 0
 
-  if command -v ip >/dev/null; then
-    gateway=$(ip route | awk '/default/ { print($3) }')
-  elif busybox ip --help >/dev/null 2>&1; then
-    gateway=$(busybox ip route | awk '/default/ { print($3) }')
-  else
-    gateway=''
-  fi
+  v4_gateway=$(find_gateway)
+  v6_gateway=$(find_gateway -6)
 
   # consider a user-defined host as well, quick check whether it's configured
-  explicit_proxy=$(timeout 5 getent hosts apt-proxy | awk '/[:blank:]/ { print($1) }' )
+  v4_explicit_proxy=$(resolve_getent ahostsv4 apt-proxy)
+  v6_explicit_proxy=$(resolve_getent ahostsv6 apt-proxy)
 
-  for ip in $explicit_proxy 127.0.0.1 $gateway; do
+  for ip in $v4_explicit_proxy $v6_explicit_proxy 127.0.0.1 $v4_gateway ::1 $v6_gateway; do
     detect_apt_cacher_ng "$ip"   && return 0
     detect_approx "$ip"          && return 0
     detect_apt_cacher "$ip"      && return 0

@@ -18,5 +18,6 @@ chmod +x bin/getent
 export PATH=$(pwd)/bin:${PATH}
 set -x
 
-# auto-apt-proxy should timeout and exit 0 in less than 10 seconds
-timeout --signal=KILL 10 auto-apt-proxy
+# auto-apt-proxy should timeout and exit 0 in aproximately 10 seconds. If it
+# doesn't finish in 20 seconds, then this test will fail.
+timeout --signal=KILL 20 auto-apt-proxy
