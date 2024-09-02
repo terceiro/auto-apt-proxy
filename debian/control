@@ -17,6 +17,7 @@ Recommends: iproute2 | busybox,
 Depends: apt,
          ${misc:Depends},
          ${shlibs:Depends},
+Suggests: avahi-utils,
 Description: automatic detector of common APT proxy settings
  auto-apt-proxy installs itself as an APT proxy autodetector, and detects
  common setups by checking some hosts on the local network for well-known APT
@@ -39,9 +40,8 @@ Description: automatic detector of common APT proxy settings
    * apt-cacher
    * squid-deb-proxy
    * any proxy advertised by an _apt_proxy._tcp SRV record in your domain
+   * any proxy advertised by an _apt_proxy._tcp SRV record in mDNS, if avahi
+     is installed and configured
  .
  This package has a minimal set of dependencies in order to minimize the
  influence on systems where it is installed.
- .
- This package does not query mDNS SRV records, which would require avahi.
- If you need that, consider the `squid-deb-proxy-client` package instead.

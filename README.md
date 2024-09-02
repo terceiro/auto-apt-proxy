@@ -52,6 +52,13 @@ then add this line to */etc/hosts*:
 
     9.9.9.9    apt-proxy
 
+If `avahi-browse` is installed, then **auto-apt-proxy** will try to find any
+proxies announced via mDNS. If, for some reason, you would prefer the name of
+the announced proxy to be resolved via NSS rather than the somewhat arbitrary
+order provided by Avahi, you can set `AUTO_APT_PROXY_AVAHI_NAME` environment
+variable to any non-empty string. `AUTO_APT_PROXY_AVAHI_NAME` does not change
+which proxy is used if multiple mDNS provided proxies are available.
+
 # CACHING
 
 By default, auto-apt-proxy will cache its results for 60 seconds.

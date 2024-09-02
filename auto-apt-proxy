@@ -161,6 +161,45 @@ detect_DNS_SRV_record() {
   fi
 }
 
+_lookup_avahi_local() {
+  if command -v avahi-browse >/dev/null 2>/dev/null; then
+    avahi-browse --terminate --no-db-lookup --resolve --parsable _apt_proxy._tcp |
+      grep '=' |
+      cut -d ";" -f 3,7,8,9 2>/dev/null
+  else
+    return 1
+  fi
+}
+
+_print_avahi_proxy() {
+  local avahi_result
+  avahi_result="$1"
+  if [ -n "${AUTO_APT_PROXY_AVAHI_NAME:-}" ]; then
+    echo "http://$(
+      echo "${avahi_result}" |
+        tr ' ' '\n' |
+        cut -d ';' -f 2,4 |
+        tr ';' ':' |
+        head -n 1
+    )"
+  else
+    echo "${avahi_result}" |
+      tr " " "\n" |
+      awk -F ";" '/IPv6/ { print "http://[" $3 "]:" $4} /IPv4/ { print "http://" $3 ":" $4}' |
+      head -n 1
+  fi
+}
+
+detect_avahi_local() {
+  local avahi_result
+  if avahi_result="$(_lookup_avahi_local)"; then
+    _print_avahi_proxy "${avahi_result}"
+  else
+    return 1
+  fi
+}
+
+
 find_gateway() {
   local gateway
   if command -v ip >/dev/null; then
@@ -180,6 +219,7 @@ resolve_getent() {
 __detect__() {
   # If a SRV record is found, use it and guess no further.
   detect_DNS_SRV_record && return 0
+  detect_avahi_local && return 0
 
   v4_gateway=$(find_gateway)
   v6_gateway=$(find_gateway -6)
