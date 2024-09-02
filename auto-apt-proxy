@@ -38,6 +38,17 @@ cleanup() {
 }
 trap cleanup INT EXIT TERM
 
+proxy_url() {
+	case "$1" in
+		*:*)
+			echo "http://[$1]:$2"
+		;;
+		*)
+			echo "http://$1:$2"
+		;;
+	esac
+}
+
 hit() {
   timeout 5 /usr/lib/apt/apt-helper \
     -o Acquire::http::Proxy=DIRECT -o Acquire::Retries=0 \
@@ -77,7 +88,7 @@ cache() {
 
 detect_apt_cacher() {
   local ip="$1"
-  local proxy=http://$ip:3142
+  local proxy="$(proxy_url "$ip" 3142)"
   hit -o "Acquire::http::Proxy::${ip}=DIRECT" "$proxy" >/dev/null 2>&1 || true;
   if [ -s "$output" ] && grep -q -i '<title>Apt-cacher' "$output"; then
     echo "$proxy"
@@ -88,7 +99,7 @@ detect_apt_cacher() {
 
 detect_apt_cacher_ng() {
   local ip="$1"
-  local proxy=http://$ip:3142
+  local proxy="$(proxy_url "$ip" 3142)"
   if hit -o "Acquire::http::Proxy::${ip}=DIRECT" "$proxy" | grep -q -i '406.*usage.information'; then
     echo "$proxy"
     return 0
@@ -98,7 +109,7 @@ detect_apt_cacher_ng() {
 
 detect_approx() {
   local ip="$1"
-  local proxy=http://$ip:9999
+  local proxy="$(proxy_url "$ip" 9999)"
   hit -o "Acquire::http::Proxy::${ip}=DIRECT" "$proxy" >/dev/null 2>&1 || true;
   if [ -s "$output" ] && grep -q -i '<title>approx\s*server</title>' "$output"; then
     echo "$proxy"
@@ -111,7 +122,7 @@ detect_approx() {
 #       If you want that, use squid-deb-proxy-client, which depends on avahi.
 detect_squid_deb_proxy() {
   local ip="$1"
-  local proxy=http://$ip:8000
+  local proxy="$(proxy_url "$ip" 8000)"
   if hit -oDebug::acquire::http=1 -o "Acquire::http::Proxy::${ip}=DIRECT" "$proxy" 2>&1 | grep -q 'Via: .*squid-deb-proxy'; then
     echo "$proxy"
     return 0
