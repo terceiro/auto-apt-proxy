@@ -28,7 +28,7 @@ if [ -d "${cache_dir}" ]; then
     echo "E: insecure cache dir ${cache_dir}. Must be owned by UID ${uid} and have permissions 700" >&2
     exit 1
   fi
-else
+elif [ -z "${AUTO_APT_PROXY_NO_CACHE:-}" ]; then
   mkdir -m 0700 "${cache_dir}"
 fi
 
