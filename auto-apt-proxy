@@ -130,6 +130,10 @@ detect_squid_deb_proxy() {
   return 1
 }
 
+get_search_domains() {
+  awk '{ if ($1 == "search") { $1=""; print($0) } }' /etc/resolv.conf 2>/dev/null
+}
+
 # NOTE: This does NOT check MDNS/DNS-SD (avahi/zeroconf/bonjour) records.
 #       If you want that, use squid-deb-proxy-client, which depends on avahi.
 #
@@ -152,13 +156,19 @@ detect_squid_deb_proxy() {
 detect_DNS_SRV_record() {
   local domain
   domain="$(hostname --domain 2>/dev/null)"
-  if [ -n "${domain}" ]; then
-    /usr/lib/apt/apt-helper srv-lookup _apt_proxy._tcp."${domain}" 2>/dev/null |
+  search_domains=$(get_search_domains)
+  for domain in $domain $search_domains; do
+    result=$(
+      /usr/lib/apt/apt-helper srv-lookup _apt_proxy._tcp."${domain}" 2>/dev/null |
       shuf |
       awk '/^[^#]/{print "http://" $1 ":" $4;found=1;exit}END{exit !found}'
-  else
-    return 1
-  fi
+    )
+    if [ -n "${result}" ]; then
+      echo "${result}"
+      return 0
+    fi
+  done
+  return 1
 }
 
 _lookup_avahi_local() {
