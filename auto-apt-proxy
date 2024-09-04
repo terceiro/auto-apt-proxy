@@ -100,7 +100,7 @@ detect_apt_cacher() {
 detect_apt_cacher_ng() {
   local ip="$1"
   local proxy="$(proxy_url "$ip" 3142)"
-  if hit -o "Acquire::http::Proxy::${ip}=DIRECT" "$proxy" | grep -q -i '406.*usage.information'; then
+  if hit -o "Acquire::http::Proxy::${ip}=DIRECT" "$proxy" | grep -q -i 'HTTP.*406'; then
     echo "$proxy"
     return 0
   fi
