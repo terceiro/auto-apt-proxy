@@ -1,3 +1,27 @@
+auto-apt-proxy (15) unstable; urgency=medium
+
+  [ Antonio Terceiro ]
+  * Check security of cache dir before doing anything else
+  * Save output of proxy detection attempts into cache directory
+  * debian/copyright: replace anonscm.debian.org URL with a salsa one
+  * autopkgtest: drop test for squid-deb-proxy (Closes: #1033530)
+  * Don't create cache directory when not using it
+  * Add proper support for IPv6 (Closes: #1058561)
+  * apt-cacher-ng: don't require a exact message match (Closes: #1037081)
+  * DNS: also lookup SRV entries in the search domains from resolve.conf
+
+  [ Lucas Kanashiro ]
+  * d/t/control: add ruby-rackup as a dependency of timeout test if ruby-rack >= 3
+  * d/t/timeout: increase timeout to 15 seconds
+
+  [ Helmut Grohne ]
+  * Print IPv6 URL's correctly (Closes: #1034472)
+
+  [ James Tocknell ]
+  * Add support for mDNS via avahi (Closes: #1051206)
+
+ -- Antonio Terceiro <terceiro@debian.org>  Wed, 04 Sep 2024 21:04:51 -0300
+
 auto-apt-proxy (14.1) unstable; urgency=medium
 
   * autopkgtest: drop test for squid-deb-proxy (Closes: #1033530)
