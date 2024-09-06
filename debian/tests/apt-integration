@@ -6,6 +6,25 @@ cd ${AUTOPKGTEST_TMP:-/tmp}
 unset no_proxy
 
 export AUTO_APT_PROXY_NO_CACHE=1
+echo "#1 download package"
 apt-get source auto-apt-proxy
 
-grep auto-apt-proxy /var/log/apt-cacher-ng/apt-cacher.log
+log=/var/log/apt-cacher-ng/apt-cacher.log
+
+echo "#2 check that the package was downloaded via the proxy"
+tries=0
+while [ $tries -lt 10 ]; do
+  if grep auto-apt-proxy $log; then
+    echo "#2 OK"
+    exit
+  fi
+  sleep 1
+  tries=$((tries+1))
+done
+
+echo "#2 Failure: could not find source download in $log!"
+echo "[$log contents]:"
+echo "----------------8<----------------8<----------------8<-----------------"
+cat $log
+echo "----------------8<----------------8<----------------8<-----------------"
+exit 1
