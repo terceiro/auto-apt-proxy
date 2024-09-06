@@ -1,3 +1,9 @@
+auto-apt-proxy (15.1) unstable; urgency=medium
+
+  * debian/tests/apt-integration: improve reliability
+
+ -- Antonio Terceiro <terceiro@debian.org>  Fri, 06 Sep 2024 18:50:50 -0300
+
 auto-apt-proxy (15) unstable; urgency=medium
 
   [ Antonio Terceiro ]
