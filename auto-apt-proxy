@@ -238,7 +238,10 @@ __detect__() {
   v4_explicit_proxy=$(resolve_getent ahostsv4 apt-proxy)
   v6_explicit_proxy=$(resolve_getent ahostsv6 apt-proxy)
 
-  for ip in $v4_explicit_proxy $v6_explicit_proxy 127.0.0.1 $v4_gateway ::1 $v6_gateway; do
+  v4_addresses=$(ip -4 route | awk '{if($10 == "linkdown") {print($9)}}')
+  # TODO add v6 addessses as well
+
+  for ip in $v4_explicit_proxy $v6_explicit_proxy $v4_addresses 127.0.0.1 $v4_gateway ::1 $v6_gateway; do
     detect_apt_cacher_ng "$ip"   && return 0
     detect_approx "$ip"          && return 0
     detect_apt_cacher "$ip"      && return 0
