@@ -201,9 +201,14 @@ _print_avahi_proxy() {
 }
 
 detect_avahi_local() {
-  local avahi_result
+  local avahi_result proxy
   if avahi_result="$(_lookup_avahi_local)"; then
-    _print_avahi_proxy "${avahi_result}"
+    proxy=$(_print_avahi_proxy "${avahi_result}")
+    if hit "${proxy}" >/dev/null 2>&1; then
+      echo "${proxy}"
+    else
+      return 1
+    fi
   else
     return 1
   fi
