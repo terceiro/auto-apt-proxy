@@ -1,3 +1,11 @@
+auto-apt-proxy (15.2) unstable; urgency=medium
+
+  * Check local IPv4 addresses as well before 127.0.0.1
+  * debian/tests/control: mark tests that require running system services
+  * avahi: don't trust avahi response blindly, verify first
+
+ -- Antonio Terceiro <terceiro@debian.org>  Mon, 27 Jan 2025 05:37:38 -0300
+
 auto-apt-proxy (15.1) unstable; urgency=medium
 
   * debian/tests/apt-integration: improve reliability
