@@ -59,6 +59,19 @@ order provided by Avahi, you can set `AUTO_APT_PROXY_AVAHI_NAME` environment
 variable to any non-empty string. `AUTO_APT_PROXY_AVAHI_NAME` does not change
 which proxy is used if multiple mDNS provided proxies are available.
 
+# PRECEDENCE BETWEEN MULTIPLE POSSIBLE PROXIES
+
+**auto-apt-proxy** will look for possible proxies in the following order:
+
+- A locally running proxy on 127.0.0.1
+- A locally running proxy on other local addresses
+- A proxy running on the `apt-proxy` on DNS or local hostname resolution
+  (`/etc/hosts`).
+- A proxy on the network default gateway
+- A proxy running in the host and port declared in the `_apt_proxy_` SRV DNS
+  record
+- A proxy running and announced via mDNS (avahi).
+
 # CACHING
 
 By default, auto-apt-proxy will cache its results for 60 seconds.
