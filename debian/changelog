@@ -1,3 +1,14 @@
+auto-apt-proxy (16) unstable; urgency=medium
+
+  * Give top priority to 127.0.0.1 over other local addresses
+  * Only check DNS and avahi after checking local addresses
+  * Check locally running proxy before anything else
+  * Build manpage with pandoc
+  * Document precedence order for proxies
+  * Bump Standards-Version to 4.7.0; no changes needed
+
+ -- Antonio Terceiro <terceiro@debian.org>  Wed, 29 Jan 2025 16:42:59 +0100
+
 auto-apt-proxy (15.2) unstable; urgency=medium
 
   * Check local IPv4 addresses as well before 127.0.0.1
