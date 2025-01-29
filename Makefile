@@ -1,13 +1,10 @@
 all: auto-apt-proxy.1
 
-auto-apt-proxy.1: auto-apt-proxy.pod
-	pod2man --verbose --name auto-apt-proxy -c '' -r '' --utf8 $< $@ || ($(RM) $@; false)
-
-auto-apt-proxy.pod: README.md
-	sed -e 's/^#/=head1/; s|\*\*\([^\*]*\)\*\*|B<\1>|g; s|\*\([^\*]*\)\*|I<\1>|g' $< > $@ || ($(RM) $@; false)
+auto-apt-proxy.1: README.md
+	pandoc --standalone --from markdown --to man -o $@ $^
 
 clean:
-	$(RM) auto-apt-proxy.1 auto-apt-proxy.pod
+	$(RM) auto-apt-proxy.1
 
 .PHONY: check test
 
