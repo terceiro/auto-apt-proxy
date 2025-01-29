@@ -232,10 +232,6 @@ resolve_getent() {
 }
 
 __detect__() {
-  # If a SRV record is found, use it and guess no further.
-  detect_DNS_SRV_record && return 0
-  detect_avahi_local && return 0
-
   v4_gateway=$(find_gateway)
   v6_gateway=$(find_gateway -6)
 
@@ -252,6 +248,11 @@ __detect__() {
     detect_apt_cacher "$ip"      && return 0
     detect_squid_deb_proxy "$ip" && return 0
   done
+
+  # If a SRV record is found, use it and guess no further.
+  detect_DNS_SRV_record && return 0
+  detect_avahi_local && return 0
+
   return 0
 }
 
