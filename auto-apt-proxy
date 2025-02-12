@@ -204,7 +204,7 @@ detect_avahi_local() {
   local avahi_result proxy
   if avahi_result="$(_lookup_avahi_local)"; then
     proxy=$(_print_avahi_proxy "${avahi_result}")
-    if hit "${proxy}" >/dev/null 2>&1; then
+    if curl --silent --output /dev/null "${proxy}"; then
       echo "${proxy}"
     else
       return 1

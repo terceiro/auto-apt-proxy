@@ -19,6 +19,7 @@ Depends: apt,
          ${misc:Depends},
          ${shlibs:Depends},
 Suggests: avahi-utils,
+          curl,
 Description: automatic detector of common APT proxy settings
  auto-apt-proxy installs itself as an APT proxy autodetector, and detects
  common setups by checking some hosts on the local network for well-known APT
@@ -41,8 +42,9 @@ Description: automatic detector of common APT proxy settings
    * apt-cacher
    * squid-deb-proxy
    * any proxy advertised by an _apt_proxy._tcp SRV record in your domain
-   * any proxy advertised by an _apt_proxy._tcp SRV record in mDNS, if avahi
-     is installed and configured
+   * any proxy advertised by an _apt_proxy._tcp SRV record in mDNS (needs
+     avahi-tools and curl to be installed, and avahi-daemon to be installed and
+     running)
  .
  This package has a minimal set of dependencies in order to minimize the
  influence on systems where it is installed.
