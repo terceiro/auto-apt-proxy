@@ -39,14 +39,14 @@ cleanup() {
 trap cleanup INT EXIT TERM
 
 proxy_url() {
-	case "$1" in
-		*:*)
-			echo "http://[$1]:$2"
-		;;
-		*)
-			echo "http://$1:$2"
-		;;
-	esac
+  case "$1" in
+    *:*)
+      echo "http://[$1]:$2"
+    ;;
+    *)
+      echo "http://$1:$2"
+    ;;
+  esac
 }
 
 hit() {
