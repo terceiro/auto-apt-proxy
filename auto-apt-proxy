@@ -171,47 +171,25 @@ detect_DNS_SRV_record() {
   return 1
 }
 
-_lookup_avahi_local() {
-  if command -v avahi-browse >/dev/null 2>/dev/null; then
-    avahi-browse --terminate --no-db-lookup --resolve --parsable _apt_proxy._tcp |
-      grep '=' |
-      cut -d ";" -f 3,7,8,9 2>/dev/null
-  else
-    return 1
-  fi
-}
-
-_print_avahi_proxy() {
-  local avahi_result
-  avahi_result="$1"
-  if [ -n "${AUTO_APT_PROXY_AVAHI_NAME:-}" ]; then
-    echo "http://$(
-      echo "${avahi_result}" |
-        tr ' ' '\n' |
-        cut -d ';' -f 2,4 |
-        tr ';' ':' |
-        head -n 1
-    )"
-  else
-    echo "${avahi_result}" |
-      tr " " "\n" |
-      awk -F ";" '/IPv6/ { print "http://[" $3 "]:" $4} /IPv4/ { print "http://" $3 ":" $4}' |
-      head -n 1
-  fi
-}
-
 detect_avahi_local() {
-  local avahi_result proxy
-  if avahi_result="$(_lookup_avahi_local)"; then
-    proxy=$(_print_avahi_proxy "${avahi_result}")
-    if curl --silent --output /dev/null "${proxy}"; then
-      echo "${proxy}"
-    else
-      return 1
-    fi
+  local data iptype hostname ip port url check
+  data=$(avahi-browse --terminate --no-db-lookup --resolve --parsable _apt_proxy._tcp | awk -F ';' '/^=;/ { print($7, $8, $9); exit}')
+  ip=$(echo "${data}" | awk '{print($2)}')
+  port=$(echo "${data}" | awk '{print($3)}')
+
+  if [ -n "${AUTO_APT_PROXY_AVAHI_NAME:-}" ]; then
+    hostname="$(echo "${data}" | awk '{print($1)}')"
+    proxy="http://${hostname}:${port}"
   else
+    proxy="$(proxy_url "${ip}" "${port}")"
+  fi
+
+  check="$(LANG=C.UTF-8 hit -o "Acquire::http::Proxy::${ip}=DIRECT" "${proxy}" || true)"
+  if echo "${check}" | grep -q '111: Connection refused'; then
     return 1
   fi
+
+  echo "${proxy}"
 }
 
 
