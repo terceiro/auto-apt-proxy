@@ -1,3 +1,10 @@
+auto-apt-proxy (16.2) unstable; urgency=medium
+
+  * Rewrite avahi proxy detection.
+    It no longer needs curl to work.
+
+ -- Antonio Terceiro <terceiro@debian.org>  Thu, 20 Feb 2025 09:03:26 -0300
+
 auto-apt-proxy (16.1) unstable; urgency=medium
 
   * Fix check for avahi proxy.
