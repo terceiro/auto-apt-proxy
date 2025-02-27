@@ -1,0 +1,17 @@
+#!/bin/sh
+
+set -eu
+
+if ! newnet true; then
+  echo "I: cannot use user namespaces"
+  exit 77
+fi
+
+echo "Running auto-apt-proxy on a fresh network namespace"
+echo "Proxy should be empty"
+proxy="$(newnet auto-apt-proxy)"
+echo "Proxy = \"${proxy}\""
+if test -n "${proxy}"; then
+  echo "E: proxy is not empty"
+  exit 1
+fi
