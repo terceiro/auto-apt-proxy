@@ -1,3 +1,14 @@
+auto-apt-proxy (16.3) unstable; urgency=medium
+
+  * avahi: skip detection if avahi-browse is not installed.
+    This fixes a regression introduced when the avahi support was
+    simplified.
+    Fixes: 7e781c13dcb9 ("Rewrite avahi proxy detection")
+  * avahi: also catch `101: Network is unreachable` as a failure
+  * Add autopkgtest for the case where no proxy is available
+
+ -- Antonio Terceiro <terceiro@debian.org>  Thu, 27 Feb 2025 10:41:46 -0300
+
 auto-apt-proxy (16.2) unstable; urgency=medium
 
   * Rewrite avahi proxy detection.
