@@ -1,3 +1,11 @@
+auto-apt-proxy (16.4) unstable; urgency=medium
+
+  * Always check for presence of `ip`. (Closes: #1099448)
+  * Document functionality restriction without iproute2 or busybox
+  * Recommends: prefer busybox to iproute2
+
+ -- Antonio Terceiro <terceiro@debian.org>  Tue, 04 Mar 2025 13:42:05 -0300
+
 auto-apt-proxy (16.3) unstable; urgency=medium
 
   * avahi: skip detection if avahi-browse is not installed.
