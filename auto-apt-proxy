@@ -97,6 +97,8 @@ cache() {
         cached_proxy=$(cat "${cache_file}")
         log_info "using cached proxy: ${cached_proxy} (ttl = $((cache_ttl - cache_age))s)"
         echo "${cached_proxy}"
+      else
+        log_info "using cache: no proxy detected (ttl = $((cache_ttl - cache_age))s)"
       fi
     else
       # update cache
@@ -262,6 +264,7 @@ __detect__() {
   detect_DNS_SRV_record && return 0
   detect_avahi_local && return 0
 
+  log_info "no proxy detected"
   return 0
 }
 
