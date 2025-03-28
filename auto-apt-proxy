@@ -176,7 +176,12 @@ detect_avahi_local() {
   if ! command -v avahi-browse >/dev/null 2>/dev/null; then
     return 1
   fi
+
   data=$(avahi-browse --terminate --no-db-lookup --resolve --parsable _apt_proxy._tcp | awk -F ';' '/^=;/ { print($7, $8, $9); exit}')
+  if [ -z "${data}" ]; then
+    return 1
+  fi
+
   ip=$(echo "${data}" | awk '{print($2)}')
   port=$(echo "${data}" | awk '{print($3)}')
 
