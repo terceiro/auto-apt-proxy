@@ -18,6 +18,14 @@
 
 set -eu
 
+log() {
+  echo "auto-apt-proxy:" "$@" >&2
+}
+
+log_error() {
+  log "ERROR:" "$@"
+}
+
 uid=$(id -u)
 cache_dir=${TMPDIR:-/tmp}/.auto-apt-proxy-${uid}
 if [ -d "${cache_dir}" ]; then
@@ -25,7 +33,7 @@ if [ -d "${cache_dir}" ]; then
   # correct permissions
   owner_and_mode="$(stat --format=%u:%f "${cache_dir}")"
   if [ "${owner_and_mode}" != "${uid}:41c0" ]; then
-    echo "E: insecure cache dir ${cache_dir}. Must be owned by UID ${uid} and have permissions 700" >&2
+    log_error "insecure cache dir ${cache_dir}. Must be owned by UID ${uid} and have permissions 700" >&2
     exit 1
   fi
 elif [ -z "${AUTO_APT_PROXY_NO_CACHE:-}" ]; then
