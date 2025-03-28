@@ -1,2 +1,2 @@
-$ auto-apt-proxy 
+$ auto-apt-proxy 2>/dev/null
 http://127.0.0.1:3142
