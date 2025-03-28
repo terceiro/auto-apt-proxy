@@ -2,6 +2,8 @@
 
 set -eu
 
+export AUTO_APT_PROXY_NO_CACHE=1
+
 if ! newnet true; then
   echo "I: cannot use user namespaces"
   exit 77
