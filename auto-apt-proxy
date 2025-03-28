@@ -22,6 +22,10 @@ log() {
   echo "auto-apt-proxy:" "$@" >&2
 }
 
+log_info() {
+  log "INFO:" "$@"
+}
+
 log_error() {
   log "ERROR:" "$@"
 }
@@ -227,6 +231,8 @@ resolve_getent() {
 }
 
 __detect__() {
+  log_info "looking for available APT cache"
+
   v4_gateway=$(find_gateway)
   v6_gateway=$(find_gateway -6)
 
