@@ -240,6 +240,13 @@ resolve_getent() {
   timeout 5 getent "$@" | awk '/[:blank:]/ { if ($2 == "STREAM") {print($1)} }' | uniq
 }
 
+get_container_host() {
+  if [ -f /run/.containerenv ]; then
+    resolve_getent ahostsv4 host.containers.internal 2>/dev/null || true
+    resolve_getent ahostsv6 host.containers.internal 2>/dev/null || true
+  fi
+}
+
 __detect__() {
   log_info "looking for available APT cache"
 
@@ -253,7 +260,9 @@ __detect__() {
   v4_addresses=$($ip -4 route | awk '{if($10 == "linkdown") {print($9)}}')
   # TODO add v6 addessses as well
 
-  for ip in 127.0.0.1 $v4_addresses $v4_explicit_proxy $v6_explicit_proxy $v4_gateway ::1 $v6_gateway; do
+  container_host=$(get_container_host)
+
+  for ip in 127.0.0.1 $v4_addresses $v4_explicit_proxy $v6_explicit_proxy $container_host $v4_gateway ::1 $v6_gateway; do
     detect_apt_cacher_ng "$ip"   && return 0
     detect_approx "$ip"          && return 0
     detect_apt_cacher "$ip"      && return 0

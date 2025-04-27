@@ -1,0 +1,21 @@
+#!/bin/sh
+
+set -eu
+
+# This script assumes that 1) it's running on a guest system, such as a
+# container or VM and 2) there is a proxy running on the host system.
+
+under_test=$(basename $0)
+virt="$(systemd-detect-virt || true)"
+if [ "${virt}" != "${under_test}" ]; then
+  echo "I: virt is ${virt}, not ${under_test}. Skip" >&2
+  exit 77
+fi
+
+proxy=$(auto-apt-proxy)
+if [ -z "${proxy}" ]; then
+  echo "E: proxy not found!" >&2
+  exit 1
+fi
+
+echo "proxy: ${proxy}"
