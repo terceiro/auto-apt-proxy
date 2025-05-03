@@ -1,3 +1,12 @@
+auto-apt-proxy (16.6) unstable; urgency=medium
+
+  * Send log messages to stderr. This avoids running too silently and mask
+    roblems.
+  * autopkgtest: noproxy: avoid interference from previous test
+  * Add support for unprivileged podman containers
+
+ -- Antonio Terceiro <terceiro@debian.org>  Sat, 03 May 2025 11:09:11 -0300
+
 auto-apt-proxy (16.5) unstable; urgency=medium
 
   * avahi: fix detection when no proxy is available (Closes: #1101459)
