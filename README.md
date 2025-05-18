@@ -31,11 +31,11 @@ and for using them.
 
 When your apt proxy is installed on localhost or your default gateway,
 it should Just Work.  If you install it somewhere else, you can create
-an explicit SRV record to tell auto-apt-proxy about it.
+an explicit SRV record to tell **auto-apt-proxy** about it.
 
 Suppose your corporate domain is "example.com", and
-apt-cacher-ng is installed on "apt-cacher-ng.example.com", and
-auto-apt-proxy is installed on "alices-laptop.example.com".
+`apt-cacher-ng` is installed on "apt-cacher-ng.example.com", and
+**auto-apt-proxy** is installed on "alices-laptop.example.com".
 
 The appropriate SRV record in dnsmasq.conf would look like this:
 
@@ -74,17 +74,17 @@ not change which proxy is used if multiple mDNS provided proxies are available.
 
 # CACHING
 
-By default, auto-apt-proxy will cache its results for 60 seconds.
+By default, **auto-apt-proxy** will cache its results for 60 seconds.
 
 To disable the cache, set the `AUTO_APT_PROXY_NO_CACHE` environment variable to
 any non-empty string.
 
 # DEBUGGING ISSUES
 
-By default, `auto-apt-proxy` operates silently and will only output any
+By default, **auto-apt-proxy** operates silently and will only output any
 detected proxy to `stdout`, as `apt` expects. To enable logging, set the
 `AUTO_APT_PROXY_DEBUG` environment variable to a non-empty string and
-`auto-apt-proxy` will log debugging messages to `stderr`.
+**auto-apt-proxy** will log debugging messages to `stderr`.
 
 # EXAMPLES
 
