@@ -22,9 +22,15 @@ log() {
   echo "auto-apt-proxy:" "$@" >&2
 }
 
-log_info() {
-  log "INFO:" "$@"
-}
+if [ -z "${AUTO_APT_PROXY_DEBUG:-}" ]; then
+  log_debug() {
+    :
+  }
+else
+  log_debug() {
+    log "DEBUG:" "$@"
+  }
+fi
 
 log_error() {
   log "ERROR:" "$@"
@@ -68,7 +74,7 @@ hit() {
 }
 
 set_proxy() {
-  log_info "detected proxy:" "$@"
+  log_debug "detected proxy:" "$@"
   echo "$@"
 }
 
@@ -95,10 +101,10 @@ cache() {
       # read cache
       if [ -s "${cache_file}" ]; then
         cached_proxy=$(cat "${cache_file}")
-        log_info "using cached proxy: ${cached_proxy} (ttl = $((cache_ttl - cache_age))s)"
+        log_debug "using cached proxy: ${cached_proxy} (ttl = $((cache_ttl - cache_age))s)"
         echo "${cached_proxy}"
       else
-        log_info "using cache: no proxy detected (ttl = $((cache_ttl - cache_age))s)"
+        log_debug "using cache: no proxy detected (ttl = $((cache_ttl - cache_age))s)"
       fi
     else
       # update cache
@@ -248,7 +254,7 @@ get_container_host() {
 }
 
 __detect__() {
-  log_info "looking for available APT cache"
+  log_debug "looking for available APT cache"
 
   v4_gateway=$(find_gateway)
   v6_gateway=$(find_gateway -6)
@@ -273,7 +279,7 @@ __detect__() {
   detect_DNS_SRV_record && return 0
   detect_avahi_local && return 0
 
-  log_info "no proxy detected"
+  log_debug "no proxy detected"
   return 0
 }
 

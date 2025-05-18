@@ -79,6 +79,13 @@ By default, auto-apt-proxy will cache its results for 60 seconds.
 To disable the cache, set the `AUTO_APT_PROXY_NO_CACHE` environment variable to
 any non-empty string.
 
+# DEBUGGING ISSUES
+
+By default, `auto-apt-proxy` operates silently and will only output any
+detected proxy to `stdout`, as `apt` expects. To enable logging, set the
+`AUTO_APT_PROXY_DEBUG` environment variable to a non-empty string and
+`auto-apt-proxy` will log debugging messages to `stderr`.
+
 # EXAMPLES
 
 $ **auto-apt-proxy**
