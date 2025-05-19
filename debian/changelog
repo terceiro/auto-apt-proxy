@@ -1,3 +1,14 @@
+auto-apt-proxy (16.7) unstable; urgency=medium
+
+  * Disable logging by default.
+    Set AUTO_APT_PROXY_DEBUG to a non-empty string to enable logging to
+    stderr.
+  * README.md: consistently mark package names up
+  * Improve logging support
+  * Fix awk usage when resolving hostnames (Closes: #1105962)
+
+ -- Antonio Terceiro <terceiro@debian.org>  Sun, 18 May 2025 23:20:27 -0300
+
 auto-apt-proxy (16.6) unstable; urgency=medium
 
   * Send log messages to stderr. This avoids running too silently and mask
