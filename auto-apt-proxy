@@ -258,7 +258,7 @@ find_gateway() {
 }
 
 resolve_getent() {
-  timeout 5 getent "$@" | awk '/[:blank:]/ { if ($2 == "STREAM") {print($1)} }' | uniq
+  timeout 5 getent "$@" | awk '/[[:blank:]]/ { if ($2 == "STREAM") {print($1)} }' | uniq
 }
 
 get_container_host() {
