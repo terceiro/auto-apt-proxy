@@ -19,7 +19,7 @@
 set -eu
 
 log() {
-  echo "auto-apt-proxy:" "$@" >&2
+  echo "[$(date --iso-8601=seconds)] auto-apt-proxy:" "$@" >&2
 }
 
 if [ -z "${AUTO_APT_PROXY_DEBUG:-}" ]; then
