@@ -324,12 +324,12 @@ __detect__() {
   sources="
     v4_localhost
     v4_addresses
-    v4_explicit_proxy
-    v6_explicit_proxy
-    container_host
     v4_gateway
     v6_localhost
     v6_gateway
+    v4_explicit_proxy
+    v6_explicit_proxy
+    container_host
   "
   for get_ips in ${sources}; do
     for ip in $(${get_ips}); do
