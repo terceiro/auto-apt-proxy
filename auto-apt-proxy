@@ -272,7 +272,7 @@ __detect__() {
   v4_gateway=$(find_gateway)
   log_debug_if_present "${v4_gateway}" "IPv4 gateway: ${v4_gateway}"
   v6_gateway=$(find_gateway -6)
-  log_debug_if_present "${v6_gateway}" "IPv4 gateway: ${v6_gateway}"
+  log_debug_if_present "${v6_gateway}" "IPv6 gateway: ${v6_gateway}"
 
   # consider a user-defined host as well, quick check whether it's configured
   v4_explicit_proxy=$(resolve_getent ahostsv4 apt-proxy)
