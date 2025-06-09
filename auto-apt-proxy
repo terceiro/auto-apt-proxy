@@ -245,16 +245,15 @@ detect_avahi_local() {
 
 
 if command -v ip >/dev/null; then
-  ip="ip"
+  ip_tool="ip"
 elif busybox ip --help >/dev/null 2>&1; then
-  ip="busybox ip"
+  ip_tool="busybox ip"
 else
-  ip="true"
+  ip_tool="true"
 fi
 
 find_gateway() {
-  local gateway
-  $ip "$@" route | awk '/default/ { print($3) }'
+  $ip_tool "$@" route | awk '/default/ { print($3) }'
 }
 
 resolve_getent() {
@@ -281,7 +280,7 @@ __detect__() {
   v6_explicit_proxy=$(resolve_getent ahostsv6 apt-proxy)
   log_debug_if_present "${v6_explicit_proxy}" "apt-proxy IPv6: ${v6_explicit_proxy}"
 
-  v4_addresses=$($ip -4 route | awk '{if($10 == "linkdown") {print($9)}}')
+  v4_addresses=$($ip_tool -4 route | awk '{if($10 == "linkdown") {print($9)}}')
   # TODO add v6 addessses as well
 
   container_host=$(get_container_host)
