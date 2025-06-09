@@ -258,6 +258,7 @@ find_gateway() {
 }
 
 resolve_getent() {
+  log_debug "Resolving hostname: getent $@"
   timeout 5 getent "$@" | awk '/[[:blank:]]/ { if ($2 == "STREAM") {print($1)} }' | uniq
 }
 
