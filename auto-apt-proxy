@@ -268,32 +268,78 @@ get_container_host() {
   fi
 }
 
+v4_localhost() {
+  echo 127.0.0.1
+}
+
+v6_localhost() {
+  echo ::1
+}
+
+v4_gateway() {
+  local ret
+  ret=$(find_gateway)
+  log_debug_if_present "${ret}" "IPv4 gateway: ${ret}"
+  echo "${ret}"
+}
+
+v6_gateway() {
+  local ret
+  ret=$(find_gateway -6)
+  log_debug_if_present "${ret}" "IPv6 gateway: ${ret}"
+  echo "${ret}"
+}
+
+v4_explicit_proxy() {
+  local ret
+  ret=$(resolve_getent ahostsv4 apt-proxy)
+  log_debug_if_present "${ret}" "apt-proxy IPv4: ${ret}"
+  echo "${ret}"
+}
+
+v6_explicit_proxy() {
+  local ret
+  ret=$(resolve_getent ahostsv6 apt-proxy)
+  log_debug_if_present "${ret}" "apt-proxy IPv6: ${ret}"
+  echo "${ret}"
+}
+
+v4_addresses() {
+  local ret
+  ret=$($ip_tool -4 route | awk '{if($10 == "linkdown") {print($9)}}')
+  log_debug_if_present "${ret}" "Local IPv4 addessses: ${ret}"
+  echo "${ret}"
+}
+
+# TODO look for local v6 addessses as well
+
+container_host() {
+  local ret
+  ret=$(get_container_host)
+  log_debug_if_present "${ret}" "Container host: ${ret}"
+  echo "${ret}"
+}
+
 __detect__() {
-  v4_gateway=$(find_gateway)
-  log_debug_if_present "${v4_gateway}" "IPv4 gateway: ${v4_gateway}"
-  v6_gateway=$(find_gateway -6)
-  log_debug_if_present "${v6_gateway}" "IPv6 gateway: ${v6_gateway}"
-
-  # consider a user-defined host as well, quick check whether it's configured
-  v4_explicit_proxy=$(resolve_getent ahostsv4 apt-proxy)
-  log_debug_if_present "${v4_explicit_proxy}" "apt-proxy IPv4: ${v4_explicit_proxy}"
-  v6_explicit_proxy=$(resolve_getent ahostsv6 apt-proxy)
-  log_debug_if_present "${v6_explicit_proxy}" "apt-proxy IPv6: ${v6_explicit_proxy}"
-
-  v4_addresses=$($ip_tool -4 route | awk '{if($10 == "linkdown") {print($9)}}')
-  # TODO add v6 addessses as well
-
-  container_host=$(get_container_host)
-  log_debug_if_present "${container_host}" "Container host: ${container_host}"
-
-  for ip in 127.0.0.1 $v4_addresses $v4_explicit_proxy $v6_explicit_proxy $container_host $v4_gateway ::1 $v6_gateway; do
-    detect_apt_cacher_ng "$ip"   && return 0
-    detect_approx "$ip"          && return 0
-    detect_apt_cacher "$ip"      && return 0
-    detect_squid_deb_proxy "$ip" && return 0
+  sources="
+    v4_localhost
+    v4_addresses
+    v4_explicit_proxy
+    v6_explicit_proxy
+    container_host
+    v4_gateway
+    v6_localhost
+    v6_gateway
+  "
+  for get_ips in ${sources}; do
+    for ip in $(${get_ips}); do
+      detect_apt_cacher_ng "$ip"   && return 0
+      detect_approx "$ip"          && return 0
+      detect_apt_cacher "$ip"      && return 0
+      detect_squid_deb_proxy "$ip" && return 0
+    done
   done
 
-  # If a SRV record is found, use it and guess no further.
   detect_DNS_SRV_record && return 0
   detect_avahi_local && return 0
 
