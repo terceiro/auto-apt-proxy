@@ -1,3 +1,18 @@
+auto-apt-proxy (16.8) unstable; urgency=medium
+
+  [ Antonio Terceiro ]
+  * Include timestamp in debug logs
+  * Fix typo when printing debug information for IPv6 gateway
+  * Log before trying to resolve apt-proxy
+  * Disambiguate ip the tool from ip as an address
+  * Lazy load addresses to be checked for a proxy
+  * Try options that require resolving names last
+
+  [ Helmut Grohne ]
+  * Make parsing the default gateway more strict (Closes: #1107997)
+
+ -- Antonio Terceiro <terceiro@debian.org>  Fri, 20 Jun 2025 10:34:06 -0300
+
 auto-apt-proxy (16.7) unstable; urgency=medium
 
   * Disable logging by default.
