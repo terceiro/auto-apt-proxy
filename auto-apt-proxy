@@ -253,7 +253,7 @@ else
 fi
 
 find_gateway() {
-  $ip_tool "$@" route | awk '/default/ { print($3) }'
+  $ip_tool "$@" route | awk '/^default via/ { print($3) }'
 }
 
 resolve_getent() {
