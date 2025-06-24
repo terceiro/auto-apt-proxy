@@ -65,9 +65,9 @@ not change which proxy is used if multiple mDNS provided proxies are available.
 
 - A locally running proxy on 127.0.0.1
 - A locally running proxy on other local addresses
+- A proxy running on the host `apt-proxy`, according to /etc/hosts.
 - A proxy on the network default gateway
-- A proxy running on the `apt-proxy` on DNS or local hostname resolution
-  (`/etc/hosts`).
+- A proxy running on the host `apt-proxy`, according to DNS.
 - A proxy running in the host and port declared in the `_apt_proxy_` SRV DNS
   record
 - A proxy running and announced via mDNS (avahi).

@@ -290,11 +290,19 @@ v6_gateway() {
   echo "${ret}"
 }
 
+v4_explicit_proxy_etc_hosts() {
+  awk '/^[0-9.]+[[:blank:]]/ { for (i=1;i<=NF;i++) { if($i == "apt-proxy") {print($1); exit} } }' /etc/hosts
+}
+
 v4_explicit_proxy() {
   local ret
   ret=$(resolve_getent ahostsv4 apt-proxy)
   log_debug_if_present "${ret}" "apt-proxy IPv4: ${ret}"
   echo "${ret}"
+}
+
+v6_explicit_proxy_etc_hosts() {
+  awk '/^[0-9a-f:]+[[:blank:]]/ { for (i=1;i<=NF;i++) { if($i == "apt-proxy") {print($1); exit} } }' /etc/hosts
 }
 
 v6_explicit_proxy() {
@@ -324,8 +332,10 @@ __detect__() {
   sources="
     v4_localhost
     v4_addresses
+    v4_explicit_proxy_etc_hosts
     v4_gateway
     v6_localhost
+    v6_explicit_proxy_etc_hosts
     v6_gateway
     v4_explicit_proxy
     v6_explicit_proxy
