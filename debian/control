@@ -3,6 +3,7 @@ Section: net
 Priority: optional
 Maintainer: Antonio Terceiro <terceiro@debian.org>
 Build-Depends: debhelper (>= 11~),
+               dh-sequence-shell-completions,
                dpkg-dev (>= 1.17.14~),
                shellcheck <!nocheck>,
                pandoc,
