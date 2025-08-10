@@ -19,5 +19,5 @@ trap 'kill -9 $(cat proxy.pid)' INT TERM EXIT
 
 set -x
 
-# auto-apt-proxy should timeout and exit 0 in less than 15 seconds
-timeout --signal=KILL 15 auto-apt-proxy
+# auto-apt-proxy should timeout and exit 0 in less than 5 seconds
+timeout --signal=KILL 5 auto-apt-proxy

@@ -75,7 +75,7 @@ proxy_url() {
 }
 
 with_timeout() {
-  timeout 5 "$@"
+  timeout 1 "$@"
 }
 
 hit() {
