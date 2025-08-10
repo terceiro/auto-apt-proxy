@@ -1,3 +1,23 @@
+auto-apt-proxy (17) unstable; urgency=medium
+
+  [ Antonio Terceiro ]
+  * Try apt-proxy from /etc/hosts before default gateway
+  * Extract iterating over possible sources into a function
+  * Check for explicitly configured proxies before trying the gateway
+    (Closes: #1108265)
+  * Search gateway before DNS for containers
+  * debian/tests: add test for lxc
+  * Fix warnings and errors found by shellcheck
+  * copyright: drop year
+  * Extract timeout handling into a single function
+  * Make timeout for network probes default to 1s.
+    Suggested-By: Christopher Bock <christopher@bocki.com>
+
+  [ Christopher Bock ]
+  * add zsh completion
+
+ -- Antonio Terceiro <terceiro@debian.org>  Sun, 10 Aug 2025 13:45:56 -0300
+
 auto-apt-proxy (16.8) unstable; urgency=medium
 
   [ Antonio Terceiro ]
