@@ -3,7 +3,7 @@ Upstream-Name: auto-apt-proxy
 Source: https://salsa.debian.org/terceiro/auto-apt-proxy
 
 Files: *
-Copyright: © 2016-2020 Antonio Terceiro <terceiro@debian.org>
+Copyright: © Antonio Terceiro <terceiro@debian.org>
 License: GPL-3.0+
 
 License: GPL-3.0+
