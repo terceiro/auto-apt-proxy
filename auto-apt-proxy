@@ -324,9 +324,7 @@ __detect__() {
   sources="
     v4_localhost
     v4_addresses
-    v4_gateway
     v6_localhost
-    v6_gateway
     v4_explicit_proxy
     v6_explicit_proxy
     container_host
@@ -342,6 +340,19 @@ __detect__() {
 
   detect_DNS_SRV_record && return 0
   detect_avahi_local && return 0
+
+  sources="
+    v4_gateway
+    v6_gateway
+  "
+  for get_ips in ${sources}; do
+    for ip in $(${get_ips}); do
+      detect_apt_cacher_ng "$ip"   && return 0
+      detect_approx "$ip"          && return 0
+      detect_apt_cacher "$ip"      && return 0
+      detect_squid_deb_proxy "$ip" && return 0
+    done
+  done
 
   log_debug "no proxy detected"
   return 0
