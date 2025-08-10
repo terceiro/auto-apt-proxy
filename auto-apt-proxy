@@ -328,6 +328,16 @@ container_host() {
   echo "${ret}"
 }
 
+detect_proxy_at() {
+  local ip
+  ip="$1"
+  detect_apt_cacher_ng "$ip"   && return 0
+  detect_approx "$ip"          && return 0
+  detect_apt_cacher "$ip"      && return 0
+  detect_squid_deb_proxy "$ip" && return 0
+  return 1
+}
+
 __detect__() {
   sources="
     v4_localhost
@@ -343,10 +353,9 @@ __detect__() {
   "
   for get_ips in ${sources}; do
     for ip in $(${get_ips}); do
-      detect_apt_cacher_ng "$ip"   && return 0
-      detect_approx "$ip"          && return 0
-      detect_apt_cacher "$ip"      && return 0
-      detect_squid_deb_proxy "$ip" && return 0
+      if detect_proxy_at "${ip}"; then
+        return 0
+      fi
     done
   done
 
