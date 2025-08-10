@@ -74,8 +74,12 @@ proxy_url() {
   esac
 }
 
+with_timeout() {
+  timeout 5 "$@"
+}
+
 hit() {
-  timeout 5 /usr/lib/apt/apt-helper \
+  with_timeout /usr/lib/apt/apt-helper \
     -o Acquire::http::Proxy=DIRECT -o Acquire::Retries=0 \
     download-file "$@" "$output" 2>&1
 }
@@ -266,7 +270,7 @@ find_gateway() {
 
 resolve_getent() {
   log_debug "Resolving hostname: getent" "$@"
-  timeout 5 getent "$@" | awk '/[[:blank:]]/ { if ($2 == "STREAM") {print($1)} }' | uniq
+  with_timeout getent "$@" | awk '/[[:blank:]]/ { if ($2 == "STREAM") {print($1)} }' | uniq
 }
 
 get_container_host() {
