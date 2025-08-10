@@ -122,8 +122,10 @@ cache() {
 }
 
 detect_apt_cacher() {
-  local ip="$1"
-  local proxy="$(proxy_url "$ip" 3142)"
+  local ip
+  local proxy
+  ip="$1"
+  proxy="$(proxy_url "$ip" 3142)"
   log_debug "looking for apt-cacher at ${proxy}"
   hit -o "Acquire::http::Proxy::${ip}=DIRECT" "$proxy" >/dev/null 2>&1 || true;
   if [ -s "$output" ] && grep -q -i '<title>Apt-cacher' "$output"; then
@@ -134,8 +136,10 @@ detect_apt_cacher() {
 }
 
 detect_apt_cacher_ng() {
-  local ip="$1"
-  local proxy="$(proxy_url "$ip" 3142)"
+  local ip
+  local proxy
+  ip="$1"
+  proxy="$(proxy_url "$ip" 3142)"
   log_debug "looking for apt-cacher-ng at ${proxy}"
   if hit -o "Acquire::http::Proxy::${ip}=DIRECT" "$proxy" | grep -q -i 'HTTP.*406'; then
     set_proxy "$proxy"
@@ -145,8 +149,10 @@ detect_apt_cacher_ng() {
 }
 
 detect_approx() {
-  local ip="$1"
-  local proxy="$(proxy_url "$ip" 9999)"
+  local ip
+  local proxy
+  ip="$1"
+  proxy="$(proxy_url "$ip" 9999)"
   log_debug "looking for approx at ${proxy}"
   hit -o "Acquire::http::Proxy::${ip}=DIRECT" "$proxy" >/dev/null 2>&1 || true;
   if [ -s "$output" ] && grep -q -i '<title>approx\s*server</title>' "$output"; then
@@ -159,8 +165,10 @@ detect_approx() {
 # NOTE: This does NOT check MDNS/DNS-SD (avahi/zeroconf/bonjour) records.
 #       If you want that, use squid-deb-proxy-client, which depends on avahi.
 detect_squid_deb_proxy() {
-  local ip="$1"
-  local proxy="$(proxy_url "$ip" 8000)"
+  local ip
+  local proxy
+  ip="$1"
+  proxy="$(proxy_url "$ip" 8000)"
   log_debug "looking for squid at ${proxy}"
   if hit -oDebug::acquire::http=1 -o "Acquire::http::Proxy::${ip}=DIRECT" "$proxy" 2>&1 | grep -q 'Via: .*squid-deb-proxy'; then
     set_proxy "$proxy"
@@ -212,7 +220,7 @@ detect_DNS_SRV_record() {
 }
 
 detect_avahi_local() {
-  local data iptype hostname ip port url check
+  local data hostname ip port check
   if ! command -v avahi-browse >/dev/null 2>/dev/null; then
     log_debug "avahi-browse not available; skipping mDNS lookup"
     return 1
@@ -257,7 +265,7 @@ find_gateway() {
 }
 
 resolve_getent() {
-  log_debug "Resolving hostname: getent $@"
+  log_debug "Resolving hostname: getent" "$@"
   timeout 5 getent "$@" | awk '/[[:blank:]]/ { if ($2 == "STREAM") {print($1)} }' | uniq
 }
 
