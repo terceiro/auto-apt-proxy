@@ -1,3 +1,11 @@
+auto-apt-proxy (16.8~deb13u1) trixie; urgency=medium
+
+  * Check explicitly configured proxies before network gateway
+    (Closes: #1108265)
+  * Add trixie-specific gbp.conf
+
+ -- Antonio Terceiro <terceiro@debian.org>  Sun, 10 Aug 2025 14:16:53 -0300
+
 auto-apt-proxy (16.8) unstable; urgency=medium
 
   [ Antonio Terceiro ]
