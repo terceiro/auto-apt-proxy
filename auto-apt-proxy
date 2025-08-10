@@ -263,8 +263,11 @@ resolve_getent() {
 
 get_container_host() {
   if [ -f /run/.containerenv ]; then
-    resolve_getent ahostsv4 host.containers.internal 2>/dev/null || true
-    resolve_getent ahostsv6 host.containers.internal 2>/dev/null || true
+    # podman
+    resolve_getent ahostsv4 host.containers.internal 2>/dev/null || resolve_getent ahostsv6 host.containers.internal 2>/dev/null || true
+  elif [ -f /.dockerenv ] || systemd-detect-virt --quiet --container 2>/dev/null; then
+    # for any other type of container, look for the gateway
+    find_gateway
   fi
 }
 
@@ -354,13 +357,16 @@ __detect__() {
   # TODO check local IPv6 addresses
   detect_from v4_localhost v4_addresses v6_localhost && return 0
 
+  # For containers, check the host first
+  detect_from container_host && return 0
+
   # Check for explicitly configured proxies
   detect_from v4_explicit_proxy_etc_hosts v6_explicit_proxy_etc_hosts && return 0
   detect_DNS_SRV_record && return 0
   detect_avahi_local && return 0
 
   # Check special hosts on the network
-  detect_from v4_gateway v6_gateway container_host && return 0
+  detect_from v4_gateway v6_gateway && return 0
 
   log_debug "no proxy detected"
   return 0
