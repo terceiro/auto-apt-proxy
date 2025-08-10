@@ -38,6 +38,6 @@ Tests: noproxy
 Depends: @, newpid
 Restrictions: allow-stderr, skippable
 
-Tests: podman
+Tests: podman, lxc
 Depends: @, systemd
 Restrictions: allow-stderr, skippable, proxy-on-host
