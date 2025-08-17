@@ -1,4 +1,4 @@
-auto-apt-proxy (16.8~deb13u1) trixie; urgency=medium
+auto-apt-proxy (16.8+deb13u1) trixie; urgency=medium
 
   * Check explicitly configured proxies before network gateway
     (Closes: #1108265)
