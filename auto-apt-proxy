@@ -32,6 +32,10 @@ else
   }
 fi
 
+log_warning() {
+  log "WARNING:" "$@"
+}
+
 log_error() {
   log "ERROR:" "$@"
 }
@@ -261,7 +265,11 @@ detect_avahi_local() {
   ip=$(echo "${data}" | awk '{print($2)}')
   port=$(echo "${data}" | awk '{print($3)}')
 
+  # TODO: Delete usage of ${AUTO_APT_PROXY_AVAHI_NAME} after Debian 14
   if [ -n "${AUTO_APT_PROXY_AVAHI_NAME:-}" ]; then
+    log_warning "AUTO_APT_PROXY_AVAHI_NAME is deprecated; please use AUTO_APT_PROXY_MDNS_NAME instead."
+  fi
+  if [ -n "${AUTO_APT_PROXY_MDNS_NAME:-${AUTO_APT_PROXY_AVAHI_NAME:-}}" ]; then
     hostname="$(echo "${data}" | awk '{print($1)}')"
     proxy="http://${hostname}:${port}"
   else
