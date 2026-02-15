@@ -43,6 +43,10 @@ log_debug_if_present() {
   log_debug "${msg}"
 }
 
+SERVICE_NAME="${SERVICE_NAME:-_apt-proxy._tcp}"
+# illegal format; RFC6335 section 5.1
+SERVICE_NAME_LEGACY="_apt_proxy._tcp"
+
 uid=$(id -u)
 cache_dir=${TMPDIR:-/tmp}/.auto-apt-proxy-${uid}
 if [ -d "${cache_dir}" ]; then
@@ -221,10 +225,12 @@ detect_DNS_SRV_record() {
   local domain
   domain="$(hostname --domain 2>/dev/null)"
   search_domains=$(get_search_domains)
+  local service
+  service="${1:-${SERVICE_NAME}}"
   for d in $domain $search_domains; do
-    log_debug "Looking up SRV entry for _apt_proxy._tcp.${d}"
+    log_debug "Looking up SRV entry for ${service}.${d}"
     result=$(
-      /usr/lib/apt/apt-helper srv-lookup _apt_proxy._tcp."${d}" 2>/dev/null |
+      /usr/lib/apt/apt-helper srv-lookup "${service}.${d}" 2>/dev/null |
       shuf |
       awk '/^[^#]/{print "http://" $1 ":" $4;found=1;exit}END{exit !found}'
     )
@@ -243,9 +249,11 @@ detect_avahi_local() {
     return 1
   fi
 
-  log_debug "Looking up _apt_proxy._tcp on mDNS (avahi)"
+  local service
+  service="${1:-${SERVICE_NAME}}"
+  log_debug "Looking up ${service} on mDNS (avahi)"
 
-  data=$(avahi-browse --terminate --no-db-lookup --resolve --parsable _apt_proxy._tcp | awk -F ';' '/^=;/ { print($7, $8, $9); exit}')
+  data=$(avahi-browse --terminate --no-db-lookup --resolve --parsable "${service}" | awk -F ';' '/^=;/ { print($7, $8, $9); exit}')
   if [ -z "${data}" ]; then
     return 1
   fi
@@ -403,8 +411,14 @@ __detect__() {
 
   # Check for explicitly configured proxies
   detect_from v4_explicit_proxy_etc_hosts v6_explicit_proxy_etc_hosts && return 0
+
+  # TODO: delete the call using ${SERVICE_NAME_LEGACY} after Debian 14
   detect_DNS_SRV_record && return 0
+  detect_DNS_SRV_record "${SERVICE_NAME_LEGACY}" && return 0
+
+  # TODO: delete the call using ${SERVICE_NAME_LEGACY} after Debian 14
   detect_avahi_local && return 0
+  detect_avahi_local "${SERVICE_NAME_LEGACY}" && return 0
 
   # Check special hosts on the network
   detect_from v4_gateway v6_gateway && return 0
