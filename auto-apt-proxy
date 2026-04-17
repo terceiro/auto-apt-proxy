@@ -172,7 +172,7 @@ detect_squid_deb_proxy() {
   local ip
   local proxy
   ip="$1"
-  proxy="$(proxy_url "$ip" 8000)"
+  proxy="$(proxy_url "$ip" 3563)"
   log_debug "looking for squid at ${proxy}"
   if hit -oDebug::acquire::http=1 -o "Acquire::http::Proxy::${ip}=DIRECT" "$proxy" 2>&1 | grep -q 'Via: .*squid-deb-proxy'; then
     set_proxy "$proxy"
