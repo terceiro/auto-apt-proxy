@@ -1,3 +1,10 @@
+auto-apt-proxy (17.1) unstable; urgency=medium
+
+  [ Paride Legovini ]
+  * Update squid-deb-proxy default port, now 3563
+
+ -- Antonio Terceiro <terceiro@debian.org>  Sat, 18 Apr 2026 07:53:16 -0300
+
 auto-apt-proxy (17) unstable; urgency=medium
 
   [ Antonio Terceiro ]
