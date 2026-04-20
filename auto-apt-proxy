@@ -374,6 +374,7 @@ __detect__() {
 
   # Check for explicitly configured proxies
   detect_from v4_explicit_proxy_etc_hosts v6_explicit_proxy_etc_hosts && return 0
+  detect_from v4_explicit_proxy v6_explicit_proxy && return 0
   detect_DNS_SRV_record && return 0
   detect_avahi_local && return 0
 
