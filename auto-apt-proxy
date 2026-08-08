@@ -261,6 +261,7 @@ if command -v ip >/dev/null; then
 elif busybox ip --help >/dev/null 2>&1; then
   ip_tool="busybox ip"
 else
+  log_debug "No \`ip\` or \`busybox ip\` available, finding the default gateway won't work"
   ip_tool="true"
 fi
 
