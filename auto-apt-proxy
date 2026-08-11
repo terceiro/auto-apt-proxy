@@ -348,10 +348,10 @@ container_host() {
 detect_proxy_at() {
   local ip
   ip="$1"
+  detect_squid_deb_proxy "$ip" && return 0
   detect_apt_cacher_ng "$ip"   && return 0
   detect_approx "$ip"          && return 0
   detect_apt_cacher "$ip"      && return 0
-  detect_squid_deb_proxy "$ip" && return 0
   return 1
 }
 
