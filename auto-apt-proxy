@@ -81,6 +81,7 @@ with_timeout() {
 hit() {
   with_timeout /usr/lib/apt/apt-helper \
     -o Acquire::http::Proxy=DIRECT -o Acquire::Retries=0 \
+    -o Acquire::http::Proxy-Auto-Detect= \
     download-file "$@" "$output" 2>&1
 }
 
