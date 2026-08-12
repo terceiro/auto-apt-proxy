@@ -1,0 +1,8 @@
+#!/bin/sh
+
+set -eu
+base="$(dirname "$0")/.."
+export AUTO_APT_PROXY_DEBUG=1
+export AUTO_APT_PROXY_NO_CACHE=1
+export PATH="${base}:${PATH}"
+exec auto-apt-proxy "$@"
