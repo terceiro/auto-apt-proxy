@@ -86,6 +86,21 @@ detected proxy to `stdout`, as `apt` expects. To enable logging, set the
 `AUTO_APT_PROXY_DEBUG` environment variable to a non-empty string and
 **auto-apt-proxy** will log debugging messages to `stderr`.
 
+# WAITING TO BE ONLINE
+
+Starting with version 18, auto-apt-proxy will wait for the network to be
+online before attempting to detect any proxies. This is done by calling
+`/usr/lib/apt/apt-helper wait-online`, and is intended to help with cases
+where:
+
+1. the network takes some time to start;
+1. apt is used right away after booting, even before the network is fully up;
+1. the first `auto-apt-proxy` call fails to find a proxy, and that gets
+   cached.
+
+To disable this behaviour, you can set the `AUTO_APT_PROXY_NO_WAIT_ONLINE`
+environment variable to any non-empty value.
+
 # EXAMPLES
 
 $ **auto-apt-proxy**

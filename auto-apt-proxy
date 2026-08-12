@@ -78,6 +78,18 @@ with_timeout() {
   timeout 1 "$@"
 }
 
+wait_online() {
+  if [ -n "${AUTO_APT_PROXY_NO_WAIT_ONLINE:-}" ]; then
+    return
+  fi
+  # apt-helper wait-online already has a timeout of its own, of 30s. That
+  # should to be enough for most systems to come online.
+  log_debug "Waiting for network to be online"
+  if ! /usr/lib/apt/apt-helper wait-online; then
+    exit
+  fi
+}
+
 hit() {
   with_timeout /usr/lib/apt/apt-helper \
     -o Acquire::http::Proxy=DIRECT -o Acquire::Retries=0 \
@@ -367,6 +379,8 @@ detect_from() {
 }
 
 __detect__() {
+  wait_online
+
   # Check for a local running proxy
   # TODO check local IPv6 addresses
   detect_from v4_localhost v4_addresses v6_localhost && return 0
