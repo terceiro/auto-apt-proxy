@@ -258,31 +258,24 @@ detect_avahi_local() {
   service="${1:-${SERVICE_NAME}}"
   log_debug "Looking up ${service} on mDNS (avahi)"
 
-  data=$(avahi-browse --terminate --no-db-lookup --resolve --parsable "${service}" | awk -F ';' '/^=;/ { print($7, $8, $9); exit}')
-  if [ -z "${data}" ]; then
-    return 1
-  fi
+  avahi_output="${output_dir}/avahi-browse"
+  avahi-browse --terminate --no-db-lookup --resolve --parsable "${service}" | awk -F ';' '/^=;/ { print($7, $8, $9) }' > "${avahi_output}"
+  while read -r hostname ip port; do
+    if [ -n "${AUTO_APT_PROXY_AVAHI_NAME:-}" ]; then
+      proxy="http://${hostname}:${port}"
+    else
+      proxy="$(proxy_url "${ip}" "${port}")"
+    fi
 
-  ip=$(echo "${data}" | awk '{print($2)}')
-  port=$(echo "${data}" | awk '{print($3)}')
-
-  # TODO: Delete usage of ${AUTO_APT_PROXY_AVAHI_NAME} after Debian 14
-  if [ -n "${AUTO_APT_PROXY_AVAHI_NAME:-}" ]; then
-    log_warning "AUTO_APT_PROXY_AVAHI_NAME is deprecated; please use AUTO_APT_PROXY_MDNS_NAME instead."
-  fi
-  if [ -n "${AUTO_APT_PROXY_MDNS_NAME:-${AUTO_APT_PROXY_AVAHI_NAME:-}}" ]; then
-    hostname="$(echo "${data}" | awk '{print($1)}')"
-    proxy="http://${hostname}:${port}"
-  else
-    proxy="$(proxy_url "${ip}" "${port}")"
-  fi
-
-  check="$(LANG=C.UTF-8 hit -o "Acquire::http::Proxy::${ip}=DIRECT" "${proxy}" || true)"
-  if echo "${check}" | grep -q '111: Connection refused\|101: Network is unreachable'; then
-    return 1
-  fi
-
-  set_proxy "${proxy}"
+    check="$(LANG=C.UTF-8 hit -o "Acquire::http::Proxy::${ip}=DIRECT" "${proxy}" || true)"
+    log_debug "Result from checking ${proxy}: ${check}"
+    if echo "${check}" | grep -q '111: Connection refused\|101: Network is unreachable'; then
+      continue
+    else
+      set_proxy "${proxy}"
+      return 0
+    fi
+  done < "${avahi_output}"
 }
 
 __have_resolved()
