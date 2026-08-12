@@ -274,13 +274,26 @@ if command -v ip >/dev/null; then
 elif busybox ip --help >/dev/null 2>&1; then
   ip_tool="busybox ip"
 else
-  log_debug "No \`ip\` or \`busybox ip\` available, finding the default gateway won't work"
+  log_debug "No \`ip\` or \`busybox ip\` available"
   ip_tool="true"
 fi
 
-find_gateway() {
-  $ip_tool "$@" route | awk '/^default via/ { print($3) }'
-}
+if [ "${ip_tool}" != 'true' ]; then
+  log_debug "Gateway lookup will use \"${ip_tool}\""
+  find_gateway() {
+    $ip_tool "$@" route | awk '/^default via/ { print($3) }'
+  }
+elif command -v networkctl >/dev/null 2>&1; then
+  log_debug "Gateway lookup will use \"networkctl status\""
+  find_gateway() {
+    (networkctl status || true) | awk '$1 == "Gateway:" {print($2)}'
+  }
+else
+  log_debug "No tools found to look network gateway up"
+  find_gateway() {
+    :
+  }
+fi
 
 resolve_getent() {
   log_debug "Resolving hostname: getent" "$@"
