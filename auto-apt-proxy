@@ -269,7 +269,7 @@ detect_avahi_local() {
 
     check="$(LANG=C.UTF-8 hit -o "Acquire::http::Proxy::${ip}=DIRECT" "${proxy}" || true)"
     log_debug "Result from checking ${proxy}: ${check}"
-    if echo "${check}" | grep -q '111: Connection refused\|101: Network is unreachable'; then
+    if echo "${check}" | grep -q '111: Connection refused\|101: Network is unreachable\|22: Invalid argument'; then
       continue
     else
       set_proxy "${proxy}"
