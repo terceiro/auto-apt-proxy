@@ -32,6 +32,10 @@ else
   }
 fi
 
+log_warning() {
+  log "WARNING:" "$@"
+}
+
 log_error() {
   log "ERROR:" "$@"
 }
@@ -42,6 +46,10 @@ log_debug_if_present() {
   if [ -z "${item}" ]; then return; fi
   log_debug "${msg}"
 }
+
+SERVICE_NAME="${SERVICE_NAME:-_apt-proxy._tcp}"
+# illegal format; RFC6335 section 5.1
+SERVICE_NAME_LEGACY="_apt_proxy._tcp"
 
 uid=$(id -u)
 cache_dir=${TMPDIR:-/tmp}/.auto-apt-proxy-${uid}
@@ -221,10 +229,12 @@ detect_DNS_SRV_record() {
   local domain
   domain="$(hostname --domain 2>/dev/null)"
   search_domains=$(get_search_domains)
+  local service
+  service="${1:-${SERVICE_NAME}}"
   for d in $domain $search_domains; do
-    log_debug "Looking up SRV entry for _apt_proxy._tcp.${d}"
+    log_debug "Looking up SRV entry for ${service}.${d}"
     result=$(
-      /usr/lib/apt/apt-helper srv-lookup _apt_proxy._tcp."${d}" 2>/dev/null |
+      /usr/lib/apt/apt-helper srv-lookup "${service}.${d}" 2>/dev/null |
       shuf |
       awk '/^[^#]/{print "http://" $1 ":" $4;found=1;exit}END{exit !found}'
     )
@@ -243,9 +253,11 @@ detect_avahi_local() {
     return 1
   fi
 
-  log_debug "Looking up _apt_proxy._tcp on mDNS (avahi)"
+  local service
+  service="${1:-${SERVICE_NAME}}"
+  log_debug "Looking up ${service} on mDNS (avahi)"
 
-  data=$(avahi-browse --terminate --no-db-lookup --resolve --parsable _apt_proxy._tcp | awk -F ';' '/^=;/ { print($7, $8, $9); exit}')
+  data=$(avahi-browse --terminate --no-db-lookup --resolve --parsable "${service}" | awk -F ';' '/^=;/ { print($7, $8, $9); exit}')
   if [ -z "${data}" ]; then
     return 1
   fi
@@ -253,7 +265,11 @@ detect_avahi_local() {
   ip=$(echo "${data}" | awk '{print($2)}')
   port=$(echo "${data}" | awk '{print($3)}')
 
+  # TODO: Delete usage of ${AUTO_APT_PROXY_AVAHI_NAME} after Debian 14
   if [ -n "${AUTO_APT_PROXY_AVAHI_NAME:-}" ]; then
+    log_warning "AUTO_APT_PROXY_AVAHI_NAME is deprecated; please use AUTO_APT_PROXY_MDNS_NAME instead."
+  fi
+  if [ -n "${AUTO_APT_PROXY_MDNS_NAME:-${AUTO_APT_PROXY_AVAHI_NAME:-}}" ]; then
     hostname="$(echo "${data}" | awk '{print($1)}')"
     proxy="http://${hostname}:${port}"
   else
@@ -268,6 +284,78 @@ detect_avahi_local() {
   set_proxy "${proxy}"
 }
 
+__have_resolved()
+{
+  if command -v systemctl >/dev/null 2>/dev/null; then
+    if systemctl --quiet is-active systemd-resolved.service; then
+      if command -v resolvectl >/dev/null 2>/dev/null; then
+	return 0
+      fi
+    fi
+  fi
+  return 1
+}
+
+# may need some external help with e.g. '--interface=...' or '-6'
+AUTO_APT_PROXY_RESOLVECTL_OPTS="${AUTO_APT_PROXY_RESOLVECTL_OPTS:-}"
+
+__sd_dnssd_ptr_query()
+{
+  local fqdn
+  fqdn="${1}"
+  # shellcheck disable=SC2086
+  data=$( resolvectl ${AUTO_APT_PROXY_RESOLVECTL_OPTS} --type PTR query "${fqdn}" | awk '/'"${fqdn}"'/ {print gensub("\\\\032"," ", "g",$4)}' )
+  if [ -z "${data}" ]; then
+    return 1
+  fi
+  printf "%s" "${data}"
+  return 0
+}
+
+# shellcheck disable=SC2120
+detect_resolved_local() {
+  local fqdn data hostname ips ip port check
+  if ! __have_resolved; then
+    log_debug "systemd-resolved not available; skipping mDNS lookup"
+    return 1
+  fi
+
+  local service
+  service="${1:-${SERVICE_NAME}}.local"
+  log_debug "Looking up ${service} on mDNS (systemd-resolved)"
+
+  fqdn="$( __sd_dnssd_ptr_query "${service}" )"
+  if [ -z "${fqdn}" ]; then
+    log_debug "systemd-resolved did not find PTR RR for ${service}"
+    return 1
+  fi
+
+  # shellcheck disable=SC2086
+  data=$( resolvectl ${AUTO_APT_PROXY_RESOLVECTL_OPTS} service "${fqdn}" )
+  if [ -z "${data}" ]; then
+    return 1
+  fi
+
+  ip=$( echo "$data" | awk 'NR==2 {print $1}' )
+  # shellcheck disable=SC2034
+  eval "$( echo "${data}" | { IFS=":[" read -r f h p o; printf "hostname=%s\nport=%s\n" "${h#* }" "${p% *}"; } )"
+
+  ips=$( echo "$data" | awk '/-- link:/{print $1}' | sort -r )
+  for ip in $ips; do
+    if [ -n "${AUTO_APT_PROXY_MDNS_NAME:-}" ]; then
+      proxy="http://${hostname}:${port}"
+    else
+      proxy="$(proxy_url "${ip}" "${port}")"
+    fi
+    for test in detect_apt_cacher detect_apt_cacher_ng detect_approx detect_squid_deb_proxy; do
+      if ${test} "${ip}"; then
+        return 0
+      fi
+    done
+  done
+
+  return 1
+}
 
 if command -v ip >/dev/null; then
   ip_tool="ip"
@@ -403,8 +491,16 @@ __detect__() {
 
   # Check for explicitly configured proxies
   detect_from v4_explicit_proxy_etc_hosts v6_explicit_proxy_etc_hosts && return 0
+
+  # TODO: delete the call using ${SERVICE_NAME_LEGACY} after Debian 14
   detect_DNS_SRV_record && return 0
+  detect_DNS_SRV_record "${SERVICE_NAME_LEGACY}" && return 0
+
+  detect_resolved_local && return 0
+
+  # TODO: delete the call using ${SERVICE_NAME_LEGACY} after Debian 14
   detect_avahi_local && return 0
+  detect_avahi_local "${SERVICE_NAME_LEGACY}" && return 0
 
   # Check special hosts on the network
   detect_from v4_gateway v6_gateway && return 0
