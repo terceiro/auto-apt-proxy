@@ -1,3 +1,31 @@
+auto-apt-proxy (18) unstable; urgency=medium
+
+  [ Paride Legovini ]
+  * Revert "autopkgtest: drop test for squid-deb-proxy"
+
+  [ Antonio Terceiro ]
+  * Log a message when default gateway can't be looked up
+  * hit(): prevent apt-helper call from recursing into auto-apt-proxy
+    (Closes: #1142542)
+  * detect_squid_deb_proxy: fix log message
+  * Give higher precedence to squid-deb-proxy
+  * auto-apt-proxy.conf: drop unused auto-apt-proxy::Debug "setting"
+  * wait for network to be online
+  * Add ability to lookup default gateway with networkctl
+  * Use a unique output directory per run
+  * avahi: iterate over all address broadcast as potential proxies
+  * avahi: handle unrouteable addresss (Closes: #1124369)
+
+  [ Tj ]
+  * use legal SRV name (Closes: #1128058)
+  * Rename AUTO_APT_PROXY_AVAHI_NAME to AUTO_APT_PROXY_MDNS_NAME
+  * Add systemd-resolved mDNS support
+
+  [ Kirt Runolfson ]
+  * Restore DNS hostname resolution for apt-proxy (Closes: #1120071)
+
+ -- Antonio Terceiro <terceiro@debian.org>  Tue, 18 Aug 2026 11:05:20 -0300
+
 auto-apt-proxy (17.1) unstable; urgency=medium
 
   [ Paride Legovini ]
