@@ -1,3 +1,12 @@
+auto-apt-proxy (16.8+deb13u2) trixie; urgency=medium
+
+  * hit(): prevent apt-helper call from recursing into auto-apt-proxy
+    (Closes: #1142542)
+  * wait for network to be online
+  * debian/tests/timeout: fix tests to be more reliable
+
+ -- Antonio Terceiro <terceiro@debian.org>  Tue, 18 Aug 2026 12:13:08 -0300
+
 auto-apt-proxy (16.8+deb13u1) trixie; urgency=medium
 
   * Check explicitly configured proxies before network gateway
