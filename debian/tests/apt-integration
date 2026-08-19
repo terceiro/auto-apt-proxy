@@ -2,6 +2,11 @@
 
 set -eu
 
+if grep -q -r https: /etc/apt/sources.list*; then
+  echo "I: APT has HTTPS sources, this test might not work => skipping"
+  exit 77
+fi
+
 cd ${AUTOPKGTEST_TMP:-/tmp}
 unset no_proxy
 

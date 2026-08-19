@@ -1,6 +1,6 @@
 Tests: apt-integration
 Depends: @, apt-cacher-ng
-Restrictions: isolation-container, allow-stderr
+Restrictions: isolation-container, allow-stderr, skippable
 
 Test-Command: clitest debian/tests/squid-deb-proxy.txt
 Depends: @, clitest, squid-deb-proxy
