@@ -1,3 +1,9 @@
+auto-apt-proxy (18.1) unstable; urgency=medium
+
+  * debian/tests/apt-integration: skip for https APT sources
+
+ -- Antonio Terceiro <terceiro@debian.org>  Wed, 19 Aug 2026 12:30:33 -0300
+
 auto-apt-proxy (18) unstable; urgency=medium
 
   [ Paride Legovini ]
